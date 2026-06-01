@@ -5,31 +5,31 @@
    COLOR PALETTE  (25 vibrant hues, one per chromatic note)
    ============================================================ */
 var COLORS = [
-  '#FF4E6A', // C4   coral-red
-  '#FF7A45', // C#4  burnt orange
-  '#FFC837', // D4   amber
-  '#F9F032', // D#4  lemon
-  '#A8FF48', // E4   lime
-  '#26DE81', // F4   emerald
-  '#11EFC8', // F#4  aquamarine
-  '#00D4FF', // G4   cyan
-  '#00AEFF', // G#4  sky
-  '#4480FF', // A4   cobalt
-  '#6B5BFF', // A#4  indigo
-  '#9B40FF', // B4   violet
-  '#D040FB', // C5   magenta
-  '#FF3DB8', // C#5  hot pink
-  '#FF4D8F', // D5   rose
-  '#FF5E78', // D#5  salmon-pink
-  '#FF6B35', // E5   tangerine
-  '#FFAA00', // F5   gold
-  '#FFE033', // F#5  sunflower
-  '#B4FF47', // G5   yellow-green
-  '#3BFFA8', // G#5  mint
-  '#00FFEE', // A5   turquoise
-  '#40BFFF', // A#5  powder blue
-  '#A066FF', // B5   lavender-violet
-  '#FF66CC', // C6   orchid-pink
+  '#FF2D55', // C4   ruby red
+  '#FF6B1A', // C#4  ember orange
+  '#FFB800', // D4   deep amber
+  '#E8F520', // D#4  acid yellow
+  '#7ED321', // E4   forest lime
+  '#00C875', // F4   jade
+  '#00E5B0', // F#4  sea glass
+  '#00B8D9', // G4   ocean
+  '#0070F3', // G#4  electric blue
+  '#3D5AFE', // A4   ultramarine
+  '#651FFF', // A#4  deep violet
+  '#AA00FF', // B4   royal purple
+  '#D500F9', // C5   neon orchid
+  '#F50057', // C#5  crimson
+  '#FF1744', // D5   scarlet
+  '#FF6D00', // D#5  deep tangerine
+  '#FFAB00', // E5   saffron
+  '#C6FF00', // F5   chartreuse
+  '#00E676', // F#5  spring green
+  '#1DE9B6', // G5   teal glow
+  '#00B0FF', // G#5  azure
+  '#2979FF', // A5   sapphire
+  '#7C4DFF', // A#5  amethyst
+  '#E040FB', // B5   fuchsia
+  '#FF4081', // C6   flamingo
 ];
 
 /* ============================================================

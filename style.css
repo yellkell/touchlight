@@ -56,7 +56,12 @@ html, body {
     70.7% 100%, 29.3% 100%,
     0%    70.7%, 0%    29.3%
   );
-  background: var(--color);
+  /* Layered gradients: specular highlight top-left, deep shadow bottom-right */
+  background:
+    radial-gradient(ellipse 40% 28% at 30% 22%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(ellipse at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 58%),
+    radial-gradient(ellipse at 72% 80%, rgba(0,0,0,0.30) 0%, transparent 50%),
+    var(--color);
   will-change: transform, filter;
 }
 
@@ -82,10 +87,10 @@ html, body {
   right: 16px;
   background: none;
   border: none;
-  color: rgba(255,255,255,0.15);
-  font-size: 1.7rem;
+  color: rgba(255,255,255,0.2);
+  font-size: 3rem;
   line-height: 1;
-  padding: 10px;
+  padding: 12px;
   cursor: pointer;
   transition: color 0.2s, filter 0.2s;
   z-index: 100;
