@@ -8,7 +8,7 @@
   <title>TOUCHLIGHT</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
-<style>
+  <style>
 /* ============================================================
    TOUCHLIGHT  –  style.css
    ============================================================ */
@@ -58,6 +58,26 @@ html, body {
   outline: none;
 }
 
+/* Rim light — slightly larger octagon peeking out behind the main one */
+.tile::before {
+  content: '';
+  position: absolute;
+  inset: 5%;
+  clip-path: polygon(
+    29.3% 0%,  70.7% 0%,
+    100%  29.3%, 100%  70.7%,
+    70.7% 100%, 29.3% 100%,
+    0%    70.7%, 0%    29.3%
+  );
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.60) 0%,
+    rgba(255,255,255,0.18) 45%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
 .octagon {
   position: absolute;
   inset: 6.5%;
@@ -67,11 +87,17 @@ html, body {
     70.7% 100%, 29.3% 100%,
     0%    70.7%, 0%    29.3%
   );
-  /* Layered gradients: specular highlight top-left, deep shadow bottom-right */
+  /* Liquid Glass: refraction band + sharp specular + rim + depth shadow */
   background:
-    radial-gradient(ellipse 40% 28% at 30% 22%, rgba(255,255,255,0.55) 0%, transparent 100%),
-    radial-gradient(ellipse at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 58%),
-    radial-gradient(ellipse at 72% 80%, rgba(0,0,0,0.30) 0%, transparent 50%),
+    linear-gradient(130deg,
+      transparent 20%,
+      rgba(255,255,255,0.38) 34%,
+      rgba(255,255,255,0.10) 46%,
+      transparent 58%
+    ),
+    radial-gradient(ellipse 26% 16% at 24% 18%, rgba(255,255,255,0.95) 0%, transparent 100%),
+    linear-gradient(180deg, rgba(255,255,255,0.28) 0%, transparent 26%),
+    linear-gradient(320deg, rgba(0,0,0,0.20) 0%, transparent 44%),
     var(--color);
   will-change: transform, filter;
 }
@@ -99,7 +125,7 @@ html, body {
   background: none;
   border: none;
   color: rgba(255,255,255,0.2);
-  font-size: 3rem;
+  font-size: 6rem;
   line-height: 1;
   padding: 12px;
   cursor: pointer;
@@ -248,14 +274,15 @@ html, body {
 }
 
 ::-webkit-scrollbar { display: none; }
+
 </style>
 </head>
 <body>
-<div id="grid"></div>
-<button id="mode-btn">♩</button>
-<div id="progress-bar" class="hidden"><div id="progress-fill"></div></div>
-<div id="overlay"><div id="overlay-text"></div></div>
-<script>
+  <div id="grid"></div>
+  <button id="mode-btn" aria-label="Toggle guided mode">♩</button>
+  <div id="progress-bar" class="hidden"><div id="progress-fill"></div></div>
+  <div id="overlay" aria-live="assertive"><div id="overlay-text"></div></div>
+  <script>
 // TOUCHLIGHT  –  audio.js
 // Marimba-like synthesiser using Web Audio API
 
@@ -346,6 +373,9 @@ function _env(param, now, attack, decay, peak) {
 function playChord(frequencies, duration) {
   frequencies.forEach(function(f) { playNote(f, duration); });
 }
+
+</script>
+  <script>
 // TOUCHLIGHT  –  songs.js
 // Chromatic C4 → C6 (25 notes) note table + song definitions
 
@@ -437,6 +467,9 @@ var SONGS = {
     ]
   }
 };
+
+</script>
+  <script>
 // TOUCHLIGHT  –  app.js
 // Main application: grid, touch handling, free-play + guided mode
 
@@ -673,7 +706,8 @@ var _msgTimer = null;
 function showMsg(text, duration) {
   overlayText.textContent = '';
   // Support newline in message
-  text.split('\n').forEach(function(line, i) {
+  text.split('
+').forEach(function(line, i) {
     if (i > 0) overlayText.appendChild(document.createElement('br'));
     overlayText.appendChild(document.createTextNode(line));
   });
@@ -727,4 +761,7 @@ setTimeout(idleTick, 1500);
     })(i);
   }
 })();
-</script></body></html>
+
+</script>
+</body>
+</html>
