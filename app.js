@@ -130,7 +130,7 @@ function onTap(idx) {
       if (guided.step >= guided.notes.length) {
         var g = guided;
         guided = null;
-        setTimeout(function() { celebrate(g); }, 700);
+        setTimeout(function() { celebrate(g); }, 1800);
       } else {
         setTimeout(function() { if (guided) highlightStep(); }, 320);
       }

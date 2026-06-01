@@ -17,8 +17,9 @@ html, body {
   -webkit-user-select: none;
   user-select: none;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
+  padding-top: 5vh;
 }
 
 /* ============================================================
