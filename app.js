@@ -90,7 +90,7 @@ var tiles = NOTES.map(function(note, i) {
 modeBtnEl.addEventListener('click', function() {
   if (mode === 'free') {
     mode = 'guided';
-    modeBtnEl.textContent = 'FREE PLAY';
+    modeBtnEl.textContent = '♩';
     modeBtnEl.classList.add('active');
     stopGuided();
     guided = { notes: SONGS.twinkle.notes.slice(), step: 0, total: SONGS.twinkle.notes.length };
@@ -99,7 +99,7 @@ modeBtnEl.addEventListener('click', function() {
     setTimeout(function() { if (guided) highlightStep(); }, 400);
   } else {
     mode = 'free';
-    modeBtnEl.textContent = 'GUIDED';
+    modeBtnEl.textContent = '♩';
     modeBtnEl.classList.remove('active');
     progressBar.classList.add('hidden');
     stopGuided();
@@ -132,7 +132,7 @@ function onTap(idx) {
       if (guided.step >= guided.notes.length) {
         var g = guided;
         guided = null;
-        setTimeout(function() { celebrate(g); }, 280);
+        setTimeout(function() { celebrate(g); }, 700);
       } else {
         setTimeout(function() { if (guided) highlightStep(); }, 320);
       }
@@ -195,9 +195,7 @@ function celebrate(finishedGuided) {
   tiles.forEach(function(t) { t.oct.classList.remove('guided-active'); });
   progressBar.classList.add('hidden');
 
-  showMsg('🎉 BRAVO! 🎉', 3500);
-
-  /* Cascade wave across all tiles */
+  /* Pure visual cascade — no text */
   tiles.forEach(function(t, i) {
     setTimeout(function() {
       addAnim(t.oct, 'celebrate', 780);
