@@ -130,6 +130,7 @@ function onTap(idx) {
   var t = tiles[idx];
   playNote(t.note.freq);
   triggerFlash(t.oct);
+  spawnRipple(t.tile);
 
   if (mode === 'guided' && guided) {
     var expected = guided.notes[guided.step];
@@ -137,8 +138,16 @@ function onTap(idx) {
 
     if (idx === expIdx) {
       // Correct note!
+      t.tile.classList.remove('guided-hint');
       t.oct.classList.remove('guided-active');
       addAnim(t.oct, 'correct', 480);
+
+      // Radiate glow to neighbours
+      getNeighbours(idx).forEach(function(ni) {
+        setTimeout(function() {
+          addAnim(tiles[ni].oct, 'neighbor-glow', 550);
+        }, 70);
+      });
 
       guided.step++;
       setProgress(guided.step / guided.total);
@@ -157,21 +166,44 @@ function onTap(idx) {
   }
 }
 
+function spawnRipple(tile) {
+  var wave = document.createElement('div');
+  wave.className = 'ripple-wave';
+  tile.appendChild(wave);
+  setTimeout(function() { if (wave.parentNode) wave.parentNode.removeChild(wave); }, 580);
+}
+
+function getNeighbours(idx) {
+  var row = Math.floor(idx / 5), col = idx % 5, result = [];
+  [[-1,0],[1,0],[0,-1],[0,1]].forEach(function(d) {
+    var r = row + d[0], c = col + d[1];
+    if (r >= 0 && r < 5 && c >= 0 && c < 5) result.push(r * 5 + c);
+  });
+  return result;
+}
+
 /* ============================================================
    GUIDED HELPERS
    ============================================================ */
 function highlightStep() {
   if (!guided) return;
-  tiles.forEach(function(t) { t.oct.classList.remove('guided-active'); });
+  tiles.forEach(function(t) {
+    t.oct.classList.remove('guided-active');
+    t.tile.classList.remove('guided-hint');
+  });
   var noteName = guided.notes[guided.step];
   var idx = NOTE_INDEX[noteName];
-  if (idx !== undefined) tiles[idx].oct.classList.add('guided-active');
+  if (idx !== undefined) {
+    tiles[idx].oct.classList.add('guided-active');
+    tiles[idx].tile.classList.add('guided-hint');
+  }
 }
 
 function stopGuided() {
   guided = null;
   tiles.forEach(function(t) {
     t.oct.classList.remove('guided-active', 'correct', 'wrong');
+    t.tile.classList.remove('guided-hint');
   });
 }
 
@@ -241,18 +273,20 @@ function showMsg(text, duration) {
 }
 
 /* ============================================================
-   IDLE AMBIENT TWINKLE
+   IDLE AMBIENT TWINKLE  (free-play only)
    ============================================================ */
 function idleTick() {
-  var idx = Math.floor(Math.random() * tiles.length);
-  var t   = tiles[idx];
-  var oct = t.oct;
-  if (!oct.classList.contains('flash') &&
-      !oct.classList.contains('guided-active') &&
-      !oct.classList.contains('celebrate')) {
-    addAnim(oct, 'idle-twinkle', 620);
+  if (mode === 'free') {
+    var idx = Math.floor(Math.random() * tiles.length);
+    var t   = tiles[idx];
+    var oct = t.oct;
+    if (!oct.classList.contains('flash') &&
+        !oct.classList.contains('guided-active') &&
+        !oct.classList.contains('celebrate')) {
+      addAnim(oct, 'idle-twinkle', 720);
+    }
   }
-  setTimeout(idleTick, 200 + Math.random() * 700);
+  setTimeout(idleTick, 400 + Math.random() * 900);
 }
 
 setTimeout(idleTick, 1500);

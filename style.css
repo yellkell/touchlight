@@ -210,19 +210,62 @@ select option { background: #141428; color: #fff; }
   animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards;
 }
 
-/* -- Guided: next note pulsing -- */
+/* -- Shockwave ripple on every tap -- */
+.ripple-wave {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.55);
+  pointer-events: none;
+  animation: ripple-wave-out 0.55s ease-out forwards;
+  z-index: 5;
+}
+@keyframes ripple-wave-out {
+  0%   { transform: scale(1);   opacity: 0.75; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+/* -- Neighbor glow (correct tap radiates outward) -- */
+@keyframes neighbor-glow {
+  0%   { filter: brightness(1); }
+  35%  { filter: brightness(3) drop-shadow(0 0 12px var(--color)); }
+  100% { filter: brightness(1); }
+}
+.octagon.neighbor-glow {
+  animation: neighbor-glow 0.55s ease-out forwards;
+}
+
+/* -- Guided: next note pulsing (more dramatic, unmistakable) -- */
 @keyframes guided-pulse {
   0%, 100% {
-    filter: brightness(1.4) drop-shadow(0 0  8px var(--color));
+    filter: brightness(1.2) drop-shadow(0 0 10px var(--color));
     transform: scale(1);
   }
   50% {
-    filter: brightness(3.2) drop-shadow(0 0 28px var(--color)) drop-shadow(0 0 50px var(--color));
-    transform: scale(1.1);
+    filter: brightness(4.5) saturate(1.4)
+            drop-shadow(0 0 30px var(--color))
+            drop-shadow(0 0 60px white);
+    transform: scale(1.13);
   }
 }
 .octagon.guided-active {
-  animation: guided-pulse 0.82s ease-in-out infinite;
+  animation: guided-pulse 0.65s ease-in-out infinite;
+}
+
+/* Outer ring on guided hint tile */
+.tile.guided-hint::after {
+  content: '';
+  position: absolute;
+  inset: 2%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.18);
+  pointer-events: none;
+  animation: hint-ring 0.65s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes hint-ring {
+  0%, 100% { transform: scale(1);    opacity: 0.4; }
+  50%       { transform: scale(1.18); opacity: 0.9; }
 }
 
 /* -- Correct tap -- */
@@ -259,13 +302,13 @@ select option { background: #141428; color: #fff; }
   animation: celebrate 0.72s ease-out forwards;
 }
 
-/* -- Idle ambient twinkle -- */
+/* -- Idle ambient twinkle (free-play only, intentionally subtle) -- */
 @keyframes idle-twinkle {
   0%, 100% { filter: brightness(1); }
-  50%       { filter: brightness(2.2) drop-shadow(0 0 10px var(--color)); }
+  50%       { filter: brightness(1.55); }
 }
 .octagon.idle-twinkle {
-  animation: idle-twinkle 0.58s ease-in-out forwards;
+  animation: idle-twinkle 0.7s ease-in-out forwards;
 }
 
 /* ============================================================
