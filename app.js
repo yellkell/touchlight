@@ -85,43 +85,27 @@ var tiles = NOTES.map(function(note, i) {
 });
 
 /* ============================================================
-   MODE TOGGLE
+   MODE TOGGLE  — one tap starts Twinkle Twinkle silently
    ============================================================ */
 modeBtnEl.addEventListener('click', function() {
   if (mode === 'free') {
     mode = 'guided';
     modeBtnEl.textContent = 'FREE PLAY';
     modeBtnEl.classList.add('active');
-    songSelectEl.classList.remove('hidden');
-    startBtnEl.classList.remove('hidden');
+    stopGuided();
+    guided = { notes: SONGS.twinkle.notes.slice(), step: 0, total: SONGS.twinkle.notes.length };
+    progressBar.classList.remove('hidden');
+    setProgress(0);
+    setTimeout(function() { if (guided) highlightStep(); }, 400);
   } else {
     mode = 'free';
     modeBtnEl.textContent = 'GUIDED';
     modeBtnEl.classList.remove('active');
-    songSelectEl.classList.add('hidden');
-    startBtnEl.classList.add('hidden');
     progressBar.classList.add('hidden');
     stopGuided();
   }
 });
 
-/* ============================================================
-   START SONG (guided mode)
-   ============================================================ */
-startBtnEl.addEventListener('click', function() {
-  var key  = songSelectEl.value;
-  var song = SONGS[key];
-  if (!song) return;
-
-  stopGuided();
-  guided = { notes: song.notes.slice(), step: 0, total: song.notes.length };
-
-  progressBar.classList.remove('hidden');
-  setProgress(0);
-  showMsg(song.emoji + '\n' + song.name, 2200);
-
-  setTimeout(function() { if (guided) highlightStep(); }, 600);
-});
 
 /* ============================================================
    TAP HANDLER
