@@ -67,20 +67,17 @@ html, body {
     70.7% 100%, 29.3% 100%,
     0%    70.7%, 0%    29.3%
   );
-  /* Liquid Glass: rim light + refraction band + specular highlight + depth */
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 9%),
-    linear-gradient(180deg, rgba(255,255,255,0.42) 0%, transparent 9%),
-    linear-gradient(90deg, rgba(255,255,255,0.28) 0%, transparent 9%),
-    linear-gradient(128deg,
-      transparent 22%,
-      rgba(255,255,255,0.32) 36%,
-      rgba(255,255,255,0.08) 47%,
-      transparent 58%
+  background-color: var(--color);
+  background-image:
+    linear-gradient(148deg,
+      rgba(255,255,255,0.52) 0%,
+      rgba(255,255,255,0.18) 10%,
+      transparent 32%
     ),
-    radial-gradient(ellipse 22% 14% at 26% 19%, rgba(255,255,255,0.92) 0%, transparent 100%),
-    linear-gradient(315deg, rgba(0,0,0,0.18) 0%, transparent 42%),
-    var(--color);
+    linear-gradient(328deg,
+      rgba(0,0,0,0.28) 0%,
+      transparent 36%
+    );
   will-change: transform, filter;
 }
 
