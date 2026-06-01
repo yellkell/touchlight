@@ -142,13 +142,6 @@ function onTap(idx) {
       t.oct.classList.remove('guided-active');
       addAnim(t.oct, 'correct', 480);
 
-      // Radiate glow to neighbours
-      getNeighbours(idx).forEach(function(ni) {
-        setTimeout(function() {
-          addAnim(tiles[ni].oct, 'neighbor-glow', 550);
-        }, 70);
-      });
-
       guided.step++;
       setProgress(guided.step / guided.total);
 
