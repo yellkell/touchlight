@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TOUCHLIGHT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+  <style>
+/* ============================================================
+   TOUCHLIGHT  –  style.css
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent:  #b06fff;
+  --accent2: #00d4ff;
+}
+
+html, body {
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5vh;
+}
+
+/* ============================================================
+   GRID  — full-bleed square, centred
+   ============================================================ */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width:  min(100vw, 100vh);
+  width:  min(100vw, 100svh);
+  aspect-ratio: 1;
+  background: #000;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TILE + OCTAGON
+   ============================================================ */
+.tile {
+  background: #000;
+  aspect-ratio: 1;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* Rim light — slightly larger octagon peeking out behind the main one */
+.tile::before {
+  content: '';
+  position: absolute;
+  inset: 5%;
+  clip-path: polygon(
+    29.3% 0%,  70.7% 0%,
+    100%  29.3%, 100%  70.7%,
+    70.7% 100%, 29.3% 100%,
+    0%    70.7%, 0%    29.3%
+  );
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.60) 0%,
+    rgba(255,255,255,0.18) 45%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.octagon {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(
+    29.3% 0%,  70.7% 0%,
+    100%  29.3%, 100%  70.7%,
+    70.7% 100%, 29.3% 100%,
+    0%    70.7%, 0%    29.3%
+  );
+  /* Liquid Glass: refraction band + sharp specular + rim + depth shadow */
+  background:
+    linear-gradient(130deg,
+      transparent 20%,
+      rgba(255,255,255,0.38) 34%,
+      rgba(255,255,255,0.10) 46%,
+      transparent 58%
+    ),
+    radial-gradient(ellipse 26% 16% at 24% 18%, rgba(255,255,255,0.95) 0%, transparent 100%),
+    linear-gradient(180deg, rgba(255,255,255,0.28) 0%, transparent 26%),
+    linear-gradient(320deg, rgba(0,0,0,0.20) 0%, transparent 44%),
+    var(--color);
+  will-change: transform, filter;
+}
+
+.note-label {
+  position: absolute;
+  bottom: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(0.38rem, 1.5vw, 0.62rem);
+  font-weight: 700;
+  color: rgba(0,0,0,0.32);
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: 'Orbitron', monospace;
+}
+
+/* ============================================================
+   FLOATING MODE BUTTON
+   ============================================================ */
+#mode-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.2);
+  font-size: 6rem;
+  line-height: 1;
+  padding: 12px;
+  cursor: pointer;
+  transition: color 0.2s, filter 0.2s;
+  z-index: 100;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+#mode-btn.active {
+  color: var(--accent);
+  filter: drop-shadow(0 0 10px var(--accent));
+}
+#mode-btn:active { transform: scale(0.88); }
+
+/* ============================================================
+   PROGRESS BAR  (top edge, 2px)
+   ============================================================ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  z-index: 50;
+}
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: width 0.25s ease-out;
+  box-shadow: 0 0 6px var(--accent2);
+}
+
+.hidden { display: none !important; }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes tap-flash {
+  0%   { filter: brightness(1)   saturate(1);   transform: scale(1); }
+  10%  { filter: brightness(5.5) saturate(0.4); transform: scale(1.08); }
+  100% { filter: brightness(1)   saturate(1);   transform: scale(1); }
+}
+.octagon.flash { animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards; }
+
+.ripple-wave {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.5);
+  pointer-events: none;
+  animation: ripple-wave-out 0.55s ease-out forwards;
+  z-index: 5;
+}
+@keyframes ripple-wave-out {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+@keyframes guided-pulse {
+  0%, 100% {
+    filter: brightness(1.2) drop-shadow(0 0 10px var(--color));
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(4.5) saturate(1.4)
+            drop-shadow(0 0 30px var(--color))
+            drop-shadow(0 0 60px white);
+    transform: scale(1.13);
+  }
+}
+.octagon.guided-active { animation: guided-pulse 0.65s ease-in-out infinite; }
+
+.tile.guided-hint::after {
+  content: '';
+  position: absolute;
+  inset: 2%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.15);
+  pointer-events: none;
+  animation: hint-ring 0.65s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes hint-ring {
+  0%, 100% { transform: scale(1);    opacity: 0.35; }
+  50%       { transform: scale(1.18); opacity: 0.85; }
+}
+
+@keyframes correct-tap {
+  0%   { filter: brightness(1) saturate(1); }
+  20%  { filter: brightness(6) saturate(2); }
+  100% { filter: brightness(1) saturate(1); }
+}
+.octagon.correct { animation: correct-tap 0.46s ease-out forwards; }
+
+@keyframes wrong-tap {
+  0%   { transform: translateX(0)    scale(1);    filter: brightness(1); }
+  18%  { transform: translateX(-6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  42%  { transform: translateX( 6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  62%  { transform: translateX(-4px); filter: brightness(0.65); }
+  80%  { transform: translateX( 4px); filter: brightness(0.65); }
+  100% { transform: translateX(0)    scale(1);    filter: brightness(1); }
+}
+.octagon.wrong { animation: wrong-tap 0.52s ease-out forwards; }
+
+@keyframes celebrate {
+  0%   { filter: brightness(1)   hue-rotate(0deg);   transform: scale(1); }
+  28%  { filter: brightness(6)   hue-rotate(120deg); transform: scale(1.14); }
+  65%  { filter: brightness(2.5) hue-rotate(240deg); transform: scale(1.07); }
+  100% { filter: brightness(1)   hue-rotate(360deg); transform: scale(1); }
+}
+.octagon.celebrate { animation: celebrate 0.72s ease-out forwards; }
+
+@keyframes idle-twinkle {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.55); }
+}
+.octagon.idle-twinkle { animation: idle-twinkle 0.7s ease-in-out forwards; }
+
+/* ============================================================
+   MESSAGE OVERLAY  (kept for potential future use, hidden by default)
+   ============================================================ */
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.28s;
+}
+#overlay.visible { opacity: 1; }
+#overlay-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem, 5vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.8);
+  padding: 16px 40px;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar { display: none; }
+
+</style>
+</head>
+<body>
+  <div id="grid"></div>
+  <button id="mode-btn" aria-label="Toggle guided mode">♩</button>
+  <div id="progress-bar" class="hidden"><div id="progress-fill"></div></div>
+  <div id="overlay" aria-live="assertive"><div id="overlay-text"></div></div>
+  <script>
+// TOUCHLIGHT  –  audio.js
+// Marimba-like synthesiser using Web Audio API
+
+var _ctx    = null;
+var _reverb = null;
+var _dryGain = null;
+var _wetGain = null;
+
+function _boot() {
+  if (_ctx) return;
+  _ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  /* ---- Synthetic room reverb ---- */
+  _reverb = _ctx.createConvolver();
+  var sr  = _ctx.sampleRate;
+  var len = Math.floor(sr * 1.4);
+  var buf = _ctx.createBuffer(2, len, sr);
+  for (var ch = 0; ch < 2; ch++) {
+    var d = buf.getChannelData(ch);
+    for (var i = 0; i < len; i++) {
+      // decaying random noise impulse response
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.8);
+    }
+  }
+  _reverb.buffer = buf;
+
+  /* ---- Master dry / wet ---- */
+  _dryGain = _ctx.createGain();
+  _wetGain = _ctx.createGain();
+  _dryGain.gain.value = 0.80;
+  _wetGain.gain.value = 0.20;
+
+  _dryGain.connect(_ctx.destination);
+  _wetGain.connect(_reverb);
+  _reverb.connect(_ctx.destination);
+}
+
+function playNote(frequency, duration) {
+  duration = duration || 0.85;
+  _boot();
+  if (_ctx.state === 'suspended') _ctx.resume();
+
+  var ctx = _ctx;
+  var now = ctx.currentTime;
+  var atk = 0.004; // 4ms attack — percussive
+
+  /* ---- Oscillators ----
+     Real marimba bars produce inharmonic overtones.
+     We model the 3 main partials with their approximate
+     frequency ratios: 1 : 2.756 : 5.404               */
+  var o1 = ctx.createOscillator(); o1.type = 'sine'; o1.frequency.value = frequency;
+  var o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = frequency * 2.756;
+  var o3 = ctx.createOscillator(); o3.type = 'sine'; o3.frequency.value = frequency * 5.404;
+
+  var g1 = ctx.createGain();
+  var g2 = ctx.createGain();
+  var g3 = ctx.createGain();
+  var master = ctx.createGain();
+  master.gain.value = 0.82;
+
+  /* Envelopes — fundamental decays longest */
+  var d1 = duration * 0.92;
+  var d2 = duration * 0.32;
+  var d3 = duration * 0.14;
+
+  _env(g1.gain, now, atk, d1, 0.62);
+  _env(g2.gain, now, atk, d2, 0.20);
+  _env(g3.gain, now, atk, d3, 0.06);
+
+  o1.connect(g1); g1.connect(master);
+  o2.connect(g2); g2.connect(master);
+  o3.connect(g3); g3.connect(master);
+  master.connect(_dryGain);
+  master.connect(_wetGain);
+
+  var stop = now + duration + 0.12;
+  o1.start(now); o1.stop(stop);
+  o2.start(now); o2.stop(stop);
+  o3.start(now); o3.stop(stop);
+}
+
+function _env(param, now, attack, decay, peak) {
+  param.setValueAtTime(0, now);
+  param.linearRampToValueAtTime(peak, now + attack);
+  param.exponentialRampToValueAtTime(0.0001, now + attack + decay);
+}
+
+function playChord(frequencies, duration) {
+  frequencies.forEach(function(f) { playNote(f, duration); });
+}
+
+</script>
+  <script>
+// TOUCHLIGHT  –  songs.js
+// Chromatic C4 → C6 (25 notes) note table + song definitions
+
+var NOTES = [
+  { name: 'C4',  label: 'C',   freq: 261.63, nat: true  },
+  { name: 'C#4', label: 'C#',  freq: 277.18, nat: false },
+  { name: 'D4',  label: 'D',   freq: 293.66, nat: true  },
+  { name: 'D#4', label: 'D#',  freq: 311.13, nat: false },
+  { name: 'E4',  label: 'E',   freq: 329.63, nat: true  },
+  { name: 'F4',  label: 'F',   freq: 349.23, nat: true  },
+  { name: 'F#4', label: 'F#',  freq: 369.99, nat: false },
+  { name: 'G4',  label: 'G',   freq: 392.00, nat: true  },
+  { name: 'G#4', label: 'G#',  freq: 415.30, nat: false },
+  { name: 'A4',  label: 'A',   freq: 440.00, nat: true  },
+  { name: 'A#4', label: 'A#',  freq: 466.16, nat: false },
+  { name: 'B4',  label: 'B',   freq: 493.88, nat: true  },
+  { name: 'C5',  label: 'C',   freq: 523.25, nat: true  },
+  { name: 'C#5', label: 'C#',  freq: 554.37, nat: false },
+  { name: 'D5',  label: 'D',   freq: 587.33, nat: true  },
+  { name: 'D#5', label: 'D#',  freq: 622.25, nat: false },
+  { name: 'E5',  label: 'E',   freq: 659.25, nat: true  },
+  { name: 'F5',  label: 'F',   freq: 698.46, nat: true  },
+  { name: 'F#5', label: 'F#',  freq: 739.99, nat: false },
+  { name: 'G5',  label: 'G',   freq: 783.99, nat: true  },
+  { name: 'G#5', label: 'G#',  freq: 830.61, nat: false },
+  { name: 'A5',  label: 'A',   freq: 880.00, nat: true  },
+  { name: 'A#5', label: 'A#',  freq: 932.33, nat: false },
+  { name: 'B5',  label: 'B',   freq: 987.77, nat: true  },
+  { name: 'C6',  label: 'C',   freq: 1046.50, nat: true },
+];
+
+// name → grid index lookup
+var NOTE_INDEX = {};
+NOTES.forEach(function(n, i) { NOTE_INDEX[n.name] = i; });
+
+var SONGS = {
+  twinkle: {
+    name:  'Twinkle Twinkle Little Star',
+    emoji: '⭐',
+    notes: [
+      'C4','C4','G4','G4','A4','A4','G4',
+      'F4','F4','E4','E4','D4','D4','C4',
+      'G4','G4','F4','F4','E4','E4','D4',
+      'G4','G4','F4','F4','E4','E4','D4',
+      'C4','C4','G4','G4','A4','A4','G4',
+      'F4','F4','E4','E4','D4','D4','C4'
+    ]
+  },
+  birthday: {
+    name:  'Happy Birthday',
+    emoji: '🎂',
+    notes: [
+      'G4','G4','A4','G4','C5','B4',
+      'G4','G4','A4','G4','D5','C5',
+      'G4','G4','G5','E5','C5','B4','A4',
+      'F5','F5','E5','C5','D5','C5'
+    ]
+  },
+  mary: {
+    name:  'Mary Had a Little Lamb',
+    emoji: '🐑',
+    notes: [
+      'E4','D4','C4','D4','E4','E4','E4',
+      'D4','D4','D4',
+      'E4','G4','G4',
+      'E4','D4','C4','D4','E4','E4','E4',
+      'E4','D4','D4','E4','D4','C4'
+    ]
+  },
+  hotcross: {
+    name:  'Hot Cross Buns',
+    emoji: '🥐',
+    notes: [
+      'E4','D4','C4',
+      'E4','D4','C4',
+      'C4','C4','C4','C4',
+      'D4','D4','D4','D4',
+      'E4','D4','C4'
+    ]
+  },
+  ode: {
+    name:  'Ode to Joy',
+    emoji: '🎻',
+    notes: [
+      'E4','E4','F4','G4','G4','F4','E4','D4',
+      'C4','C4','D4','E4','E4','D4','D4',
+      'E4','E4','F4','G4','G4','F4','E4','D4',
+      'C4','C4','D4','E4','D4','C4','C4'
+    ]
+  }
+};
+
+</script>
+  <script>
+// TOUCHLIGHT  –  app.js
+// Main application: grid, touch handling, free-play + guided mode
+
+/* ============================================================
+   COLOR PALETTE  (25 vibrant hues, one per chromatic note)
+   ============================================================ */
+var COLORS = [
+  '#FF2D55', // C4   ruby red
+  '#FF6B1A', // C#4  ember orange
+  '#FFB800', // D4   deep amber
+  '#E8F520', // D#4  acid yellow
+  '#7ED321', // E4   forest lime
+  '#00C875', // F4   jade
+  '#00E5B0', // F#4  sea glass
+  '#00B8D9', // G4   ocean
+  '#0070F3', // G#4  electric blue
+  '#3D5AFE', // A4   ultramarine
+  '#651FFF', // A#4  deep violet
+  '#AA00FF', // B4   royal purple
+  '#D500F9', // C5   neon orchid
+  '#F50057', // C#5  crimson
+  '#FF1744', // D5   scarlet
+  '#FF6D00', // D#5  deep tangerine
+  '#FFAB00', // E5   saffron
+  '#C6FF00', // F5   chartreuse
+  '#00E676', // F#5  spring green
+  '#1DE9B6', // G5   teal glow
+  '#00B0FF', // G#5  azure
+  '#2979FF', // A5   sapphire
+  '#7C4DFF', // A#5  amethyst
+  '#E040FB', // B5   fuchsia
+  '#FF4081', // C6   flamingo
+];
+
+/* ============================================================
+   DOM
+   ============================================================ */
+var gridEl      = document.getElementById('grid');
+var modeBtnEl   = document.getElementById('mode-btn');
+var progressBar = document.getElementById('progress-bar');
+var progressFill= document.getElementById('progress-fill');
+var overlayEl   = document.getElementById('overlay');
+var overlayText = document.getElementById('overlay-text');
+
+/* ============================================================
+   STATE
+   ============================================================ */
+var mode    = 'free';  // 'free' | 'guided'
+var guided  = null;    // { notes, step, total } or null
+
+/* ============================================================
+   BUILD GRID
+   ============================================================ */
+var tiles = NOTES.map(function(note, i) {
+  var tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.setAttribute('role', 'button');
+  tile.setAttribute('tabindex', '0');
+  tile.setAttribute('aria-label', note.name);
+
+  var oct = document.createElement('div');
+  oct.className = 'octagon';
+  oct.style.setProperty('--color', COLORS[i]);
+
+  var lbl = document.createElement('span');
+  lbl.className = 'note-label';
+  lbl.textContent = note.label;
+
+  oct.appendChild(lbl);
+  tile.appendChild(oct);
+  gridEl.appendChild(tile);
+
+  tile.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    onTap(i);
+  });
+
+  tile.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(i); }
+  });
+
+  return { tile: tile, oct: oct, note: note };
+});
+
+/* ============================================================
+   MODE TOGGLE  — one tap starts Twinkle Twinkle silently
+   ============================================================ */
+modeBtnEl.addEventListener('click', function() {
+  if (mode === 'free') {
+    mode = 'guided';
+    modeBtnEl.textContent = '♩';
+    modeBtnEl.classList.add('active');
+    stopGuided();
+    guided = { notes: SONGS.twinkle.notes.slice(), step: 0, total: SONGS.twinkle.notes.length };
+    progressBar.classList.remove('hidden');
+    setProgress(0);
+    setTimeout(function() { if (guided) highlightStep(); }, 400);
+  } else {
+    mode = 'free';
+    modeBtnEl.textContent = '♩';
+    modeBtnEl.classList.remove('active');
+    progressBar.classList.add('hidden');
+    stopGuided();
+  }
+});
+
+
+/* ============================================================
+   TAP HANDLER
+   ============================================================ */
+function onTap(idx) {
+  var t = tiles[idx];
+  playNote(t.note.freq);
+  triggerFlash(t.oct);
+  spawnRipple(t.tile);
+
+  if (mode === 'guided' && guided) {
+    var expected = guided.notes[guided.step];
+    var expIdx   = NOTE_INDEX[expected];
+
+    if (idx === expIdx) {
+      // Correct note!
+      t.tile.classList.remove('guided-hint');
+      t.oct.classList.remove('guided-active');
+      addAnim(t.oct, 'correct', 480);
+
+      guided.step++;
+      setProgress(guided.step / guided.total);
+
+      if (guided.step >= guided.notes.length) {
+        var g = guided;
+        guided = null;
+        setTimeout(function() { celebrate(g); }, 1800);
+      } else {
+        setTimeout(function() { if (guided) highlightStep(); }, 320);
+      }
+    } else {
+      // Wrong note
+      addAnim(t.oct, 'wrong', 560);
+    }
+  }
+}
+
+function spawnRipple(tile) {
+  var wave = document.createElement('div');
+  wave.className = 'ripple-wave';
+  tile.appendChild(wave);
+  setTimeout(function() { if (wave.parentNode) wave.parentNode.removeChild(wave); }, 580);
+}
+
+function getNeighbours(idx) {
+  var row = Math.floor(idx / 5), col = idx % 5, result = [];
+  [[-1,0],[1,0],[0,-1],[0,1]].forEach(function(d) {
+    var r = row + d[0], c = col + d[1];
+    if (r >= 0 && r < 5 && c >= 0 && c < 5) result.push(r * 5 + c);
+  });
+  return result;
+}
+
+/* ============================================================
+   GUIDED HELPERS
+   ============================================================ */
+function highlightStep() {
+  if (!guided) return;
+  tiles.forEach(function(t) {
+    t.oct.classList.remove('guided-active');
+    t.tile.classList.remove('guided-hint');
+  });
+  var noteName = guided.notes[guided.step];
+  var idx = NOTE_INDEX[noteName];
+  if (idx !== undefined) {
+    tiles[idx].oct.classList.add('guided-active');
+    tiles[idx].tile.classList.add('guided-hint');
+  }
+}
+
+function stopGuided() {
+  guided = null;
+  tiles.forEach(function(t) {
+    t.oct.classList.remove('guided-active', 'correct', 'wrong');
+    t.tile.classList.remove('guided-hint');
+  });
+}
+
+function setProgress(ratio) {
+  progressFill.style.width = Math.min(ratio * 100, 100) + '%';
+}
+
+/* ============================================================
+   CELEBRATION
+   ============================================================ */
+function celebrate(finishedGuided) {
+  tiles.forEach(function(t) { t.oct.classList.remove('guided-active'); });
+  progressBar.classList.add('hidden');
+
+  /* Pure visual cascade — no text */
+  tiles.forEach(function(t, i) {
+    setTimeout(function() {
+      addAnim(t.oct, 'celebrate', 780);
+    }, i * 52);
+  });
+
+  /* Play C-major arpeggio fanfare */
+  var fanfare = [0, 4, 7, 12, 7, 4, 12, 16]; // C E G C E G C E
+  fanfare.forEach(function(noteIdx, i) {
+    setTimeout(function() {
+      if (noteIdx < tiles.length) playNote(tiles[noteIdx].note.freq, 0.7);
+    }, i * 130);
+  });
+}
+
+/* ============================================================
+   ANIMATION UTILITIES
+   ============================================================ */
+function triggerFlash(oct) {
+  oct.classList.remove('flash', 'guided-active');
+  void oct.offsetWidth; // force reflow to restart animation
+  oct.classList.add('flash');
+  setTimeout(function() { oct.classList.remove('flash'); }, 400);
+}
+
+function addAnim(el, cls, duration) {
+  el.classList.remove(cls);
+  void el.offsetWidth;
+  el.classList.add(cls);
+  setTimeout(function() { el.classList.remove(cls); }, duration);
+}
+
+/* ============================================================
+   MESSAGE OVERLAY
+   ============================================================ */
+var _msgTimer = null;
+
+function showMsg(text, duration) {
+  overlayText.textContent = '';
+  // Support newline in message
+  text.split('
+').forEach(function(line, i) {
+    if (i > 0) overlayText.appendChild(document.createElement('br'));
+    overlayText.appendChild(document.createTextNode(line));
+  });
+  overlayEl.classList.add('visible');
+  clearTimeout(_msgTimer);
+  _msgTimer = setTimeout(function() {
+    overlayEl.classList.remove('visible');
+  }, duration || 2000);
+}
+
+/* ============================================================
+   IDLE AMBIENT TWINKLE  (free-play only)
+   ============================================================ */
+function idleTick() {
+  if (mode === 'free') {
+    var idx = Math.floor(Math.random() * tiles.length);
+    var t   = tiles[idx];
+    var oct = t.oct;
+    if (!oct.classList.contains('flash') &&
+        !oct.classList.contains('guided-active') &&
+        !oct.classList.contains('celebrate')) {
+      addAnim(oct, 'idle-twinkle', 720);
+    }
+  }
+  setTimeout(idleTick, 400 + Math.random() * 900);
+}
+
+setTimeout(idleTick, 1500);
+
+/* ============================================================
+   BACKGROUND STAR PARTICLES
+   ============================================================ */
+(function spawnStars() {
+  var container = document.getElementById('app');
+  for (var i = 0; i < 60; i++) {
+    (function(idx) {
+      var star = document.createElement('div');
+      star.style.cssText = [
+        'position:fixed',
+        'pointer-events:none',
+        'z-index:0',
+        'border-radius:50%',
+        'background:#fff',
+        'opacity:' + (0.04 + Math.random() * 0.12),
+        'width:'  + (1 + Math.random() * 2.5) + 'px',
+        'height:' + (1 + Math.random() * 2.5) + 'px',
+        'top:'    + Math.random() * 100 + 'vh',
+        'left:'   + Math.random() * 100 + 'vw',
+      ].join(';');
+      document.body.appendChild(star);
+    })(i);
+  }
+})();
+
+</script>
+</body>
+</html>
