@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TOUCHLIGHT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --hdr: 62px;
+  --bg:  #07070f;
+  --surface: rgba(255,255,255,0.06);
+  --border:  rgba(255,255,255,0.11);
+  --text:    #ffffff;
+  --accent:  #b06fff;
+  --accent2: #00d4ff;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100svh;
+}
+
+#header {
+  height: var(--hdr);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: rgba(7,7,15,0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 10px;
+  z-index: 20;
+}
+
+#logo {
+  font-family: 'Orbitron', 'Impact', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1rem, 4vw, 1.55rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #fff 0%, var(--accent2) 45%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+#logo span {
+  background: linear-gradient(90deg, var(--accent2) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 16px;
+  border-radius: 24px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.btn:active { transform: scale(0.96); }
+.btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(176,111,255,0.55);
+}
+.btn.accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-color: transparent;
+  box-shadow: 0 0 18px rgba(176,111,255,0.45);
+}
+
+select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 24px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  max-width: 170px;
+}
+select option { background: #141428; color: #fff; }
+
+.hidden { display: none !important; }
+
+#main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  min-height: 0;
+}
+
+#grid-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: #000;
+  width:  min(calc(100vh  - var(--hdr) - 44px), calc(100vw - 20px));
+  width:  min(calc(100svh - var(--hdr) - 44px), calc(100vw - 20px));
+  aspect-ratio: 1;
+}
+
+.tile {
+  background: #000;
+  aspect-ratio: 1;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.octagon {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: var(--color);
+  will-change: transform, filter;
+}
+
+.note-label {
+  position: absolute;
+  bottom: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(0.42rem, 1.6vw, 0.68rem);
+  font-weight: 700;
+  color: rgba(0,0,0,0.38);
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: 'Orbitron', monospace;
+}
+
+@keyframes tap-flash {
+  0%   { filter: brightness(1)   saturate(1);   transform: scale(1); }
+  10%  { filter: brightness(5.5) saturate(0.4); transform: scale(1.08); }
+  100% { filter: brightness(1)   saturate(1);   transform: scale(1); }
+}
+.octagon.flash { animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards; }
+
+@keyframes guided-pulse {
+  0%, 100% { filter: brightness(1.4) drop-shadow(0 0  8px var(--color)); transform: scale(1); }
+  50%       { filter: brightness(3.2) drop-shadow(0 0 28px var(--color)) drop-shadow(0 0 50px var(--color)); transform: scale(1.1); }
+}
+.octagon.guided-active { animation: guided-pulse 0.82s ease-in-out infinite; }
+
+@keyframes correct-tap {
+  0%   { filter: brightness(1) saturate(1); }
+  20%  { filter: brightness(6) saturate(2); }
+  100% { filter: brightness(1) saturate(1); }
+}
+.octagon.correct { animation: correct-tap 0.46s ease-out forwards; }
+
+@keyframes wrong-tap {
+  0%   { transform: translateX(0)    scale(1);    filter: brightness(1); }
+  18%  { transform: translateX(-6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  42%  { transform: translateX( 6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  62%  { transform: translateX(-4px); filter: brightness(0.65); }
+  80%  { transform: translateX( 4px); filter: brightness(0.65); }
+  100% { transform: translateX(0)    scale(1);    filter: brightness(1); }
+}
+.octagon.wrong { animation: wrong-tap 0.52s ease-out forwards; }
+
+@keyframes celebrate {
+  0%   { filter: brightness(1)   hue-rotate(0deg);   transform: scale(1); }
+  28%  { filter: brightness(6)   hue-rotate(120deg); transform: scale(1.14); }
+  65%  { filter: brightness(2.5) hue-rotate(240deg); transform: scale(1.07); }
+  100% { filter: brightness(1)   hue-rotate(360deg); transform: scale(1); }
+}
+.octagon.celebrate { animation: celebrate 0.72s ease-out forwards; }
+
+@keyframes idle-twinkle {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(2.2) drop-shadow(0 0 10px var(--color)); }
+}
+.octagon.idle-twinkle { animation: idle-twinkle 0.58s ease-in-out forwards; }
+
+#progress-bar { height: 4px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: width 0.25s ease-out;
+  box-shadow: 0 0 8px var(--accent2);
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.28s;
+}
+#overlay.visible { opacity: 1; }
+#overlay-text {
+  font-family: 'Orbitron', 'Impact', sans-serif;
+  font-size: clamp(1.5rem, 5.5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255,255,255,0.7), 0 0 80px rgba(176,111,255,0.5);
+  background: rgba(7,7,15,0.78);
+  padding: 18px 44px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(16px);
+}
+
+::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="header">
+    <div id="logo">TOUCH<span>LIGHT</span></div>
+    <div id="controls">
+      <button id="mode-btn" class="btn">GUIDED</button>
+      <select id="song-select" class="hidden">
+        <option value="twinkle">⭐ Twinkle Twinkle</option>
+        <option value="birthday">🎂 Happy Birthday</option>
+        <option value="mary">🐑 Mary Had a Little Lamb</option>
+        <option value="hotcross">🥐 Hot Cross Buns</option>
+        <option value="ode">🎻 Ode to Joy</option>
+      </select>
+      <button id="start-btn" class="btn accent hidden">▶ START</button>
+    </div>
+  </header>
+  <main id="main">
+    <div id="grid-wrap">
+      <div id="grid"></div>
+    </div>
+  </main>
+  <div id="progress-bar" class="hidden"><div id="progress-fill"></div></div>
+  <div id="overlay"><div id="overlay-text"></div></div>
+</div>
+
+<script>
+// ---- AUDIO ----
+var _ctx=null,_reverb=null,_dryGain=null,_wetGain=null;
+function _boot(){
+  if(_ctx)return;
+  _ctx=new(window.AudioContext||window.webkitAudioContext)();
+  _reverb=_ctx.createConvolver();
+  var sr=_ctx.sampleRate,len=Math.floor(sr*1.4),buf=_ctx.createBuffer(2,len,sr);
+  for(var ch=0;ch<2;ch++){var d=buf.getChannelData(ch);for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.8);}
+  _reverb.buffer=buf;
+  _dryGain=_ctx.createGain();_wetGain=_ctx.createGain();
+  _dryGain.gain.value=0.80;_wetGain.gain.value=0.20;
+  _dryGain.connect(_ctx.destination);_wetGain.connect(_reverb);_reverb.connect(_ctx.destination);
+}
+function _env(p,now,atk,dec,peak){p.setValueAtTime(0,now);p.linearRampToValueAtTime(peak,now+atk);p.exponentialRampToValueAtTime(0.0001,now+atk+dec);}
+function playNote(freq,dur){
+  dur=dur||0.85;_boot();
+  if(_ctx.state==='suspended')_ctx.resume();
+  var ctx=_ctx,now=ctx.currentTime,atk=0.004;
+  var o1=ctx.createOscillator(),o2=ctx.createOscillator(),o3=ctx.createOscillator();
+  o1.type='sine';o1.frequency.value=freq;
+  o2.type='sine';o2.frequency.value=freq*2.756;
+  o3.type='sine';o3.frequency.value=freq*5.404;
+  var g1=ctx.createGain(),g2=ctx.createGain(),g3=ctx.createGain(),master=ctx.createGain();
+  master.gain.value=0.82;
+  _env(g1.gain,now,atk,dur*0.92,0.62);
+  _env(g2.gain,now,atk,dur*0.32,0.20);
+  _env(g3.gain,now,atk,dur*0.14,0.06);
+  o1.connect(g1);g1.connect(master);
+  o2.connect(g2);g2.connect(master);
+  o3.connect(g3);g3.connect(master);
+  master.connect(_dryGain);master.connect(_wetGain);
+  var stop=now+dur+0.12;
+  o1.start(now);o1.stop(stop);
+  o2.start(now);o2.stop(stop);
+  o3.start(now);o3.stop(stop);
+}
+
+// ---- NOTES & SONGS ----
+var NOTES=[
+  {name:'C4', label:'C',  freq:261.63},{name:'C#4',label:'C#', freq:277.18},
+  {name:'D4', label:'D',  freq:293.66},{name:'D#4',label:'D#', freq:311.13},
+  {name:'E4', label:'E',  freq:329.63},{name:'F4', label:'F',  freq:349.23},
+  {name:'F#4',label:'F#', freq:369.99},{name:'G4', label:'G',  freq:392.00},
+  {name:'G#4',label:'G#', freq:415.30},{name:'A4', label:'A',  freq:440.00},
+  {name:'A#4',label:'A#', freq:466.16},{name:'B4', label:'B',  freq:493.88},
+  {name:'C5', label:'C',  freq:523.25},{name:'C#5',label:'C#', freq:554.37},
+  {name:'D5', label:'D',  freq:587.33},{name:'D#5',label:'D#', freq:622.25},
+  {name:'E5', label:'E',  freq:659.25},{name:'F5', label:'F',  freq:698.46},
+  {name:'F#5',label:'F#', freq:739.99},{name:'G5', label:'G',  freq:783.99},
+  {name:'G#5',label:'G#', freq:830.61},{name:'A5', label:'A',  freq:880.00},
+  {name:'A#5',label:'A#', freq:932.33},{name:'B5', label:'B',  freq:987.77},
+  {name:'C6', label:'C',  freq:1046.50}
+];
+var NOTE_INDEX={};
+NOTES.forEach(function(n,i){NOTE_INDEX[n.name]=i;});
+var SONGS={
+  twinkle:{name:'Twinkle Twinkle Little Star',emoji:'⭐',notes:['C4','C4','G4','G4','A4','A4','G4','F4','F4','E4','E4','D4','D4','C4','G4','G4','F4','F4','E4','E4','D4','G4','G4','F4','F4','E4','E4','D4','C4','C4','G4','G4','A4','A4','G4','F4','F4','E4','E4','D4','D4','C4']},
+  birthday:{name:'Happy Birthday',emoji:'🎂',notes:['G4','G4','A4','G4','C5','B4','G4','G4','A4','G4','D5','C5','G4','G4','G5','E5','C5','B4','A4','F5','F5','E5','C5','D5','C5']},
+  mary:{name:'Mary Had a Little Lamb',emoji:'🐑',notes:['E4','D4','C4','D4','E4','E4','E4','D4','D4','D4','E4','G4','G4','E4','D4','C4','D4','E4','E4','E4','E4','D4','D4','E4','D4','C4']},
+  hotcross:{name:'Hot Cross Buns',emoji:'🥐',notes:['E4','D4','C4','E4','D4','C4','C4','C4','C4','C4','D4','D4','D4','D4','E4','D4','C4']},
+  ode:{name:'Ode to Joy',emoji:'🎻',notes:['E4','E4','F4','G4','G4','F4','E4','D4','C4','C4','D4','E4','E4','D4','D4','E4','E4','F4','G4','G4','F4','E4','D4','C4','C4','D4','E4','D4','C4','C4']}
+};
+
+// ---- APP ----
+var COLORS=['#FF4E6A','#FF7A45','#FFC837','#F9F032','#A8FF48','#26DE81','#11EFC8','#00D4FF','#00AEFF','#4480FF','#6B5BFF','#9B40FF','#D040FB','#FF3DB8','#FF4D8F','#FF5E78','#FF6B35','#FFAA00','#FFE033','#B4FF47','#3BFFA8','#00FFEE','#40BFFF','#A066FF','#FF66CC'];
+
+var gridEl=document.getElementById('grid');
+var modeBtnEl=document.getElementById('mode-btn');
+var songSelectEl=document.getElementById('song-select');
+var startBtnEl=document.getElementById('start-btn');
+var progressBar=document.getElementById('progress-bar');
+var progressFill=document.getElementById('progress-fill');
+var overlayEl=document.getElementById('overlay');
+var overlayText=document.getElementById('overlay-text');
+
+var mode='free',guided=null;
+
+var tiles=NOTES.map(function(note,i){
+  var tile=document.createElement('div');
+  tile.className='tile';
+  var oct=document.createElement('div');
+  oct.className='octagon';
+  oct.style.setProperty('--color',COLORS[i]);
+  var lbl=document.createElement('span');
+  lbl.className='note-label';
+  lbl.textContent=note.label;
+  oct.appendChild(lbl);tile.appendChild(oct);gridEl.appendChild(tile);
+  tile.addEventListener('pointerdown',function(e){e.preventDefault();onTap(i);});
+  return{tile:tile,oct:oct,note:note};
+});
+
+modeBtnEl.addEventListener('click',function(){
+  if(mode==='free'){
+    mode='guided';modeBtnEl.textContent='FREE PLAY';modeBtnEl.classList.add('active');
+    songSelectEl.classList.remove('hidden');startBtnEl.classList.remove('hidden');
+  }else{
+    mode='free';modeBtnEl.textContent='GUIDED';modeBtnEl.classList.remove('active');
+    songSelectEl.classList.add('hidden');startBtnEl.classList.add('hidden');
+    progressBar.classList.add('hidden');stopGuided();
+  }
+});
+
+startBtnEl.addEventListener('click',function(){
+  var key=songSelectEl.value,song=SONGS[key];if(!song)return;
+  stopGuided();
+  guided={notes:song.notes.slice(),step:0,total:song.notes.length};
+  progressBar.classList.remove('hidden');setProgress(0);
+  showMsg(song.emoji+'\n'+song.name,2200);
+  setTimeout(function(){if(guided)highlightStep();},600);
+});
+
+function onTap(idx){
+  var t=tiles[idx];
+  playNote(t.note.freq);
+  triggerFlash(t.oct);
+  if(mode==='guided'&&guided){
+    var expIdx=NOTE_INDEX[guided.notes[guided.step]];
+    if(idx===expIdx){
+      t.oct.classList.remove('guided-active');
+      addAnim(t.oct,'correct',480);
+      guided.step++;
+      setProgress(guided.step/guided.total);
+      if(guided.step>=guided.notes.length){var g=guided;guided=null;setTimeout(function(){celebrate(g);},280);}
+      else{setTimeout(function(){if(guided)highlightStep();},320);}
+    }else{addAnim(t.oct,'wrong',560);}
+  }
+}
+
+function highlightStep(){
+  if(!guided)return;
+  tiles.forEach(function(t){t.oct.classList.remove('guided-active');});
+  var idx=NOTE_INDEX[guided.notes[guided.step]];
+  if(idx!==undefined)tiles[idx].oct.classList.add('guided-active');
+}
+function stopGuided(){
+  guided=null;
+  tiles.forEach(function(t){t.oct.classList.remove('guided-active','correct','wrong');});
+}
+function setProgress(r){progressFill.style.width=Math.min(r*100,100)+'%';}
+
+function celebrate(){
+  tiles.forEach(function(t){t.oct.classList.remove('guided-active');});
+  progressBar.classList.add('hidden');
+  showMsg('🎉 BRAVO! 🎉',3500);
+  tiles.forEach(function(t,i){setTimeout(function(){addAnim(t.oct,'celebrate',780);},i*52);});
+  [0,4,7,12,7,4,12,16].forEach(function(ni,i){setTimeout(function(){if(ni<tiles.length)playNote(tiles[ni].note.freq,0.7);},i*130);});
+}
+
+function triggerFlash(oct){
+  oct.classList.remove('flash','guided-active');void oct.offsetWidth;
+  oct.classList.add('flash');setTimeout(function(){oct.classList.remove('flash');},400);
+}
+function addAnim(el,cls,dur){
+  el.classList.remove(cls);void el.offsetWidth;
+  el.classList.add(cls);setTimeout(function(){el.classList.remove(cls);},dur);
+}
+
+var _msgT=null;
+function showMsg(text,dur){
+  overlayText.textContent='';
+  text.split('\n').forEach(function(line,i){if(i>0)overlayText.appendChild(document.createElement('br'));overlayText.appendChild(document.createTextNode(line));});
+  overlayEl.classList.add('visible');clearTimeout(_msgT);
+  _msgT=setTimeout(function(){overlayEl.classList.remove('visible');},dur||2000);
+}
+
+function idleTick(){
+  var idx=Math.floor(Math.random()*tiles.length),t=tiles[idx],oct=t.oct;
+  if(!oct.classList.contains('flash')&&!oct.classList.contains('guided-active')&&!oct.classList.contains('celebrate'))
+    addAnim(oct,'idle-twinkle',620);
+  setTimeout(idleTick,200+Math.random()*700);
+}
+setTimeout(idleTick,1500);
+
+// Background stars
+for(var _s=0;_s<55;_s++){
+  var star=document.createElement('div');
+  star.style.cssText='position:fixed;pointer-events:none;z-index:0;border-radius:50%;background:#fff;opacity:'+(0.04+Math.random()*0.12)+';width:'+(1+Math.random()*2.5)+'px;height:'+(1+Math.random()*2.5)+'px;top:'+Math.random()*100+'vh;left:'+Math.random()*100+'vw';
+  document.body.appendChild(star);
+}
+</script>
+</body>
+</html>
