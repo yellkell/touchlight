@@ -37,8 +37,6 @@ var COLORS = [
    ============================================================ */
 var gridEl      = document.getElementById('grid');
 var modeBtnEl   = document.getElementById('mode-btn');
-var songSelectEl= document.getElementById('song-select');
-var startBtnEl  = document.getElementById('start-btn');
 var progressBar = document.getElementById('progress-bar');
 var progressFill= document.getElementById('progress-fill');
 var overlayEl   = document.getElementById('overlay');

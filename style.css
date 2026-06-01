@@ -2,143 +2,41 @@
    TOUCHLIGHT  –  style.css
    ============================================================ */
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0; padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --hdr: 62px;
-  --bg:  #07070f;
-  --surface: rgba(255,255,255,0.06);
-  --border:  rgba(255,255,255,0.11);
-  --text:    #ffffff;
   --accent:  #b06fff;
   --accent2: #00d4ff;
 }
 
 html, body {
   height: 100%;
+  background: #000;
   overflow: hidden;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
-}
-
-/* ---- Layout ---- */
-#app {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
-  height: 100svh;
-}
-
-/* ---- Header (hardware panel) ---- */
-#header {
-  height: var(--hdr);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  background: #0b0b16;
-  border-bottom: 1px solid #1c1c30;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.7);
-  flex-shrink: 0;
-  z-index: 20;
-}
-
-#logo {
-  font-family: 'Orbitron', 'Impact', sans-serif;
-  font-weight: 900;
-  font-size: clamp(0.85rem, 3vw, 1.15rem);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  white-space: nowrap;
-}
-
-#logo span {
-  color: rgba(255,255,255,0.9);
-}
-
-#controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* ---- Mode button — circular LED ---- */
-.btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  padding: 0;
-  font-size: 1.35rem;
-  line-height: 46px;
-  text-align: center;
-  background: #16162a;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  box-shadow:
-    inset 0 2px 4px rgba(0,0,0,0.6),
-    inset 0 -1px 0 rgba(255,255,255,0.06),
-    0 1px 3px rgba(0,0,0,0.8);
-  color: rgba(255,255,255,0.45);
-  cursor: pointer;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-}
-.btn:active { transform: scale(0.93); }
-
-.btn.active {
-  background: #2a1250;
-  border-color: rgba(176,111,255,0.6);
-  color: #fff;
-  box-shadow:
-    0 0 0 3px rgba(176,111,255,0.15),
-    0 0 22px rgba(176,111,255,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.15),
-    inset 0 -2px 4px rgba(0,0,0,0.3);
-}
-
-.btn.accent { display: none; }
-
-select { display: none; }
-
-.hidden { display: none !important; }
-
-/* ---- Main + Grid ---- */
-#main {
-  flex: 1;
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 10px;
-  min-height: 0;
 }
 
-#grid-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
+/* ============================================================
+   GRID  — full-bleed square, centred
+   ============================================================ */
 #grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  background: #000;
-  /* size: fit both viewport dimensions */
-  width:  min(calc(100vh  - var(--hdr) - 44px), calc(100vw - 20px));
-  width:  min(calc(100svh - var(--hdr) - 44px), calc(100vw - 20px));
+  width:  min(100vw, 100vh);
+  width:  min(100vw, 100svh);
   aspect-ratio: 1;
+  background: #000;
+  flex-shrink: 0;
 }
 
-/* ---- Tile (square cell) ---- */
+/* ============================================================
+   TILE + OCTAGON
+   ============================================================ */
 .tile {
   background: #000;
   aspect-ratio: 1;
@@ -148,7 +46,6 @@ select { display: none; }
   outline: none;
 }
 
-/* ---- Octagon (clipped inner shape) ---- */
 .octagon {
   position: absolute;
   inset: 6.5%;
@@ -162,61 +59,89 @@ select { display: none; }
   will-change: transform, filter;
 }
 
-/* Note label inside octagon */
 .note-label {
   position: absolute;
   bottom: 19%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: clamp(0.42rem, 1.6vw, 0.68rem);
+  font-size: clamp(0.38rem, 1.5vw, 0.62rem);
   font-weight: 700;
-  color: rgba(0,0,0,0.38);
+  color: rgba(0,0,0,0.32);
   pointer-events: none;
   white-space: nowrap;
-  letter-spacing: 0.01em;
   font-family: 'Orbitron', monospace;
 }
+
+/* ============================================================
+   FLOATING MODE BUTTON
+   ============================================================ */
+#mode-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.15);
+  font-size: 1.7rem;
+  line-height: 1;
+  padding: 10px;
+  cursor: pointer;
+  transition: color 0.2s, filter 0.2s;
+  z-index: 100;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+#mode-btn.active {
+  color: var(--accent);
+  filter: drop-shadow(0 0 10px var(--accent));
+}
+#mode-btn:active { transform: scale(0.88); }
+
+/* ============================================================
+   PROGRESS BAR  (top edge, 2px)
+   ============================================================ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  z-index: 50;
+}
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: width 0.25s ease-out;
+  box-shadow: 0 0 6px var(--accent2);
+}
+
+.hidden { display: none !important; }
 
 /* ============================================================
    ANIMATIONS
    ============================================================ */
 
-/* -- Tap flash -- */
 @keyframes tap-flash {
   0%   { filter: brightness(1)   saturate(1);   transform: scale(1); }
   10%  { filter: brightness(5.5) saturate(0.4); transform: scale(1.08); }
   100% { filter: brightness(1)   saturate(1);   transform: scale(1); }
 }
-.octagon.flash {
-  animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards;
-}
+.octagon.flash { animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards; }
 
-/* -- Shockwave ripple on every tap -- */
 .ripple-wave {
   position: absolute;
   inset: 6.5%;
   clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
-  background: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.5);
   pointer-events: none;
   animation: ripple-wave-out 0.55s ease-out forwards;
   z-index: 5;
 }
 @keyframes ripple-wave-out {
-  0%   { transform: scale(1);   opacity: 0.75; }
+  0%   { transform: scale(1);   opacity: 0.7; }
   100% { transform: scale(1.7); opacity: 0; }
 }
 
-/* -- Neighbor glow (correct tap radiates outward) -- */
-@keyframes neighbor-glow {
-  0%   { filter: brightness(1); }
-  35%  { filter: brightness(3) drop-shadow(0 0 12px var(--color)); }
-  100% { filter: brightness(1); }
-}
-.octagon.neighbor-glow {
-  animation: neighbor-glow 0.55s ease-out forwards;
-}
-
-/* -- Guided: next note pulsing (more dramatic, unmistakable) -- */
 @keyframes guided-pulse {
   0%, 100% {
     filter: brightness(1.2) drop-shadow(0 0 10px var(--color));
@@ -229,87 +154,56 @@ select { display: none; }
     transform: scale(1.13);
   }
 }
-.octagon.guided-active {
-  animation: guided-pulse 0.65s ease-in-out infinite;
-}
+.octagon.guided-active { animation: guided-pulse 0.65s ease-in-out infinite; }
 
-/* Outer ring on guided hint tile */
 .tile.guided-hint::after {
   content: '';
   position: absolute;
   inset: 2%;
   clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.15);
   pointer-events: none;
   animation: hint-ring 0.65s ease-in-out infinite;
   z-index: 1;
 }
 @keyframes hint-ring {
-  0%, 100% { transform: scale(1);    opacity: 0.4; }
-  50%       { transform: scale(1.18); opacity: 0.9; }
+  0%, 100% { transform: scale(1);    opacity: 0.35; }
+  50%       { transform: scale(1.18); opacity: 0.85; }
 }
 
-/* -- Correct tap -- */
 @keyframes correct-tap {
-  0%   { filter: brightness(1)   saturate(1); }
-  20%  { filter: brightness(6)   saturate(2); }
-  100% { filter: brightness(1)   saturate(1); }
+  0%   { filter: brightness(1) saturate(1); }
+  20%  { filter: brightness(6) saturate(2); }
+  100% { filter: brightness(1) saturate(1); }
 }
-.octagon.correct {
-  animation: correct-tap 0.46s ease-out forwards;
-}
+.octagon.correct { animation: correct-tap 0.46s ease-out forwards; }
 
-/* -- Wrong tap: shake + red wash -- */
 @keyframes wrong-tap {
   0%   { transform: translateX(0)    scale(1);    filter: brightness(1); }
   18%  { transform: translateX(-6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
   42%  { transform: translateX( 6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
-  62%  { transform: translateX(-4px);              filter: brightness(0.65); }
-  80%  { transform: translateX( 4px);              filter: brightness(0.65); }
+  62%  { transform: translateX(-4px); filter: brightness(0.65); }
+  80%  { transform: translateX( 4px); filter: brightness(0.65); }
   100% { transform: translateX(0)    scale(1);    filter: brightness(1); }
 }
-.octagon.wrong {
-  animation: wrong-tap 0.52s ease-out forwards;
-}
+.octagon.wrong { animation: wrong-tap 0.52s ease-out forwards; }
 
-/* -- Celebration wave -- */
 @keyframes celebrate {
   0%   { filter: brightness(1)   hue-rotate(0deg);   transform: scale(1); }
   28%  { filter: brightness(6)   hue-rotate(120deg); transform: scale(1.14); }
   65%  { filter: brightness(2.5) hue-rotate(240deg); transform: scale(1.07); }
   100% { filter: brightness(1)   hue-rotate(360deg); transform: scale(1); }
 }
-.octagon.celebrate {
-  animation: celebrate 0.72s ease-out forwards;
-}
+.octagon.celebrate { animation: celebrate 0.72s ease-out forwards; }
 
-/* -- Idle ambient twinkle (free-play only, intentionally subtle) -- */
 @keyframes idle-twinkle {
   0%, 100% { filter: brightness(1); }
   50%       { filter: brightness(1.55); }
 }
-.octagon.idle-twinkle {
-  animation: idle-twinkle 0.7s ease-in-out forwards;
-}
+.octagon.idle-twinkle { animation: idle-twinkle 0.7s ease-in-out forwards; }
 
 /* ============================================================
-   PROGRESS BAR (guided mode)
-   ============================================================ */
-#progress-bar {
-  height: 4px;
-  background: rgba(255,255,255,0.08);
-  flex-shrink: 0;
-}
-#progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  width: 0%;
-  transition: width 0.25s ease-out;
-  box-shadow: 0 0 8px var(--accent2);
-}
-
-/* ============================================================
-   MESSAGE OVERLAY
+   MESSAGE OVERLAY  (kept for potential future use, hidden by default)
    ============================================================ */
 #overlay {
   position: fixed;
@@ -323,21 +217,17 @@ select { display: none; }
   transition: opacity 0.28s;
 }
 #overlay.visible { opacity: 1; }
-
 #overlay-text {
-  font-family: 'Orbitron', 'Impact', sans-serif;
-  font-size: clamp(1.5rem, 5.5vw, 3rem);
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem, 5vw, 2.8rem);
   font-weight: 900;
   letter-spacing: 0.1em;
   text-align: center;
   color: #fff;
-  text-shadow: 0 0 40px rgba(255,255,255,0.7), 0 0 80px rgba(176,111,255,0.5);
-  background: rgba(7,7,15,0.78);
-  padding: 18px 44px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.18);
-  backdrop-filter: blur(16px);
+  text-shadow: 0 0 40px rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.8);
+  padding: 16px 40px;
+  border-radius: 12px;
 }
 
-/* ---- Scrollbar hide ---- */
 ::-webkit-scrollbar { display: none; }
