@@ -389,9 +389,7 @@ select option { background: #141428; color: #fff; }
       <button id="start-btn" class="btn accent hidden">▶ START</button>
     </div>
   </header>
-  <main id="main">
-    <div id="grid-wrap"><div id="grid"></div></div>
-  </main>
+  <main id="main"><div id="grid-wrap"><div id="grid"></div></div></main>
   <div id="progress-bar" class="hidden"><div id="progress-fill"></div></div>
   <div id="overlay"><div id="overlay-text"></div></div>
 </div>
@@ -720,13 +718,6 @@ function onTap(idx) {
       t.tile.classList.remove('guided-hint');
       t.oct.classList.remove('guided-active');
       addAnim(t.oct, 'correct', 480);
-
-      // Radiate glow to neighbours
-      getNeighbours(idx).forEach(function(ni) {
-        setTimeout(function() {
-          addAnim(tiles[ni].oct, 'neighbor-glow', 550);
-        }, 70);
-      });
 
       guided.step++;
       setProgress(guided.step / guided.total);
