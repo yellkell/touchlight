@@ -1,0 +1,319 @@
+/* ============================================================
+   TOUCHLIGHT  –  style.css
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+}
+
+:root {
+  --hdr: 62px;
+  --bg:  #07070f;
+  --surface: rgba(255,255,255,0.06);
+  --border:  rgba(255,255,255,0.11);
+  --text:    #ffffff;
+  --accent:  #b06fff;
+  --accent2: #00d4ff;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---- Layout ---- */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100svh;
+}
+
+/* ---- Header ---- */
+#header {
+  height: var(--hdr);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: rgba(7,7,15,0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 10px;
+  z-index: 20;
+}
+
+#logo {
+  font-family: 'Orbitron', 'Impact', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1rem, 4vw, 1.55rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #fff 0%, var(--accent2) 45%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+
+#logo span {
+  background: linear-gradient(90deg, var(--accent2) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 16px;
+  border-radius: 24px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.btn:hover { background: rgba(255,255,255,0.13); }
+.btn:active { transform: scale(0.96); }
+
+.btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(176,111,255,0.55);
+}
+
+.btn.accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-color: transparent;
+  box-shadow: 0 0 18px rgba(176,111,255,0.45);
+}
+
+select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 24px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  max-width: 170px;
+}
+select option { background: #141428; color: #fff; }
+
+.hidden { display: none !important; }
+
+/* ---- Main + Grid ---- */
+#main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  min-height: 0;
+}
+
+#grid-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: #000;
+  /* size: fit both viewport dimensions */
+  width:  min(calc(100vh  - var(--hdr) - 44px), calc(100vw - 20px));
+  width:  min(calc(100svh - var(--hdr) - 44px), calc(100vw - 20px));
+  aspect-ratio: 1;
+}
+
+/* ---- Tile (square cell) ---- */
+.tile {
+  background: #000;
+  aspect-ratio: 1;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* ---- Octagon (clipped inner shape) ---- */
+.octagon {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(
+    29.3% 0%,  70.7% 0%,
+    100%  29.3%, 100%  70.7%,
+    70.7% 100%, 29.3% 100%,
+    0%    70.7%, 0%    29.3%
+  );
+  background: var(--color);
+  will-change: transform, filter;
+}
+
+/* Note label inside octagon */
+.note-label {
+  position: absolute;
+  bottom: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(0.42rem, 1.6vw, 0.68rem);
+  font-weight: 700;
+  color: rgba(0,0,0,0.38);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  font-family: 'Orbitron', monospace;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+/* -- Tap flash -- */
+@keyframes tap-flash {
+  0%   { filter: brightness(1)   saturate(1);   transform: scale(1); }
+  10%  { filter: brightness(5.5) saturate(0.4); transform: scale(1.08); }
+  100% { filter: brightness(1)   saturate(1);   transform: scale(1); }
+}
+.octagon.flash {
+  animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+/* -- Guided: next note pulsing -- */
+@keyframes guided-pulse {
+  0%, 100% {
+    filter: brightness(1.4) drop-shadow(0 0  8px var(--color));
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(3.2) drop-shadow(0 0 28px var(--color)) drop-shadow(0 0 50px var(--color));
+    transform: scale(1.1);
+  }
+}
+.octagon.guided-active {
+  animation: guided-pulse 0.82s ease-in-out infinite;
+}
+
+/* -- Correct tap -- */
+@keyframes correct-tap {
+  0%   { filter: brightness(1)   saturate(1); }
+  20%  { filter: brightness(6)   saturate(2); }
+  100% { filter: brightness(1)   saturate(1); }
+}
+.octagon.correct {
+  animation: correct-tap 0.46s ease-out forwards;
+}
+
+/* -- Wrong tap: shake + red wash -- */
+@keyframes wrong-tap {
+  0%   { transform: translateX(0)    scale(1);    filter: brightness(1); }
+  18%  { transform: translateX(-6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  42%  { transform: translateX( 6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  62%  { transform: translateX(-4px);              filter: brightness(0.65); }
+  80%  { transform: translateX( 4px);              filter: brightness(0.65); }
+  100% { transform: translateX(0)    scale(1);    filter: brightness(1); }
+}
+.octagon.wrong {
+  animation: wrong-tap 0.52s ease-out forwards;
+}
+
+/* -- Celebration wave -- */
+@keyframes celebrate {
+  0%   { filter: brightness(1)   hue-rotate(0deg);   transform: scale(1); }
+  28%  { filter: brightness(6)   hue-rotate(120deg); transform: scale(1.14); }
+  65%  { filter: brightness(2.5) hue-rotate(240deg); transform: scale(1.07); }
+  100% { filter: brightness(1)   hue-rotate(360deg); transform: scale(1); }
+}
+.octagon.celebrate {
+  animation: celebrate 0.72s ease-out forwards;
+}
+
+/* -- Idle ambient twinkle -- */
+@keyframes idle-twinkle {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(2.2) drop-shadow(0 0 10px var(--color)); }
+}
+.octagon.idle-twinkle {
+  animation: idle-twinkle 0.58s ease-in-out forwards;
+}
+
+/* ============================================================
+   PROGRESS BAR (guided mode)
+   ============================================================ */
+#progress-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: width 0.25s ease-out;
+  box-shadow: 0 0 8px var(--accent2);
+}
+
+/* ============================================================
+   MESSAGE OVERLAY
+   ============================================================ */
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.28s;
+}
+#overlay.visible { opacity: 1; }
+
+#overlay-text {
+  font-family: 'Orbitron', 'Impact', sans-serif;
+  font-size: clamp(1.5rem, 5.5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255,255,255,0.7), 0 0 80px rgba(176,111,255,0.5);
+  background: rgba(7,7,15,0.78);
+  padding: 18px 44px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(16px);
+}
+
+/* ---- Scrollbar hide ---- */
+::-webkit-scrollbar { display: none; }

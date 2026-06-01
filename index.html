@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TOUCHLIGHT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <header id="header">
+      <div id="logo">TOUCH<span>LIGHT</span></div>
+      <div id="controls">
+        <button id="mode-btn" class="btn" aria-label="Toggle guided mode">GUIDED</button>
+        <select id="song-select" class="hidden" aria-label="Choose a song">
+          <option value="twinkle">⭐ Twinkle Twinkle</option>
+          <option value="birthday">🎂 Happy Birthday</option>
+          <option value="mary">🐑 Mary Had a Little Lamb</option>
+          <option value="hotcross">🥐 Hot Cross Buns</option>
+          <option value="ode">🎻 Ode to Joy</option>
+        </select>
+        <button id="start-btn" class="btn accent hidden" aria-label="Start song">▶ START</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <div id="grid-wrap">
+        <div id="grid" role="group" aria-label="Touch the glowing octagon"></div>
+      </div>
+    </main>
+
+    <div id="progress-bar" class="hidden">
+      <div id="progress-fill"></div>
+    </div>
+
+    <div id="overlay" aria-live="assertive">
+      <div id="overlay-text"></div>
+    </div>
+
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="songs.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
