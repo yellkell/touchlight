@@ -58,26 +58,6 @@ html, body {
   outline: none;
 }
 
-/* Rim light — slightly larger octagon peeking out behind the main one */
-.tile::before {
-  content: '';
-  position: absolute;
-  inset: 5%;
-  clip-path: polygon(
-    29.3% 0%,  70.7% 0%,
-    100%  29.3%, 100%  70.7%,
-    70.7% 100%, 29.3% 100%,
-    0%    70.7%, 0%    29.3%
-  );
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.60) 0%,
-    rgba(255,255,255,0.18) 45%,
-    transparent 100%
-  );
-  pointer-events: none;
-}
-
 .octagon {
   position: absolute;
   inset: 6.5%;
@@ -87,17 +67,19 @@ html, body {
     70.7% 100%, 29.3% 100%,
     0%    70.7%, 0%    29.3%
   );
-  /* Liquid Glass: refraction band + sharp specular + rim + depth shadow */
+  /* Liquid Glass: rim light + refraction band + specular highlight + depth */
   background:
-    linear-gradient(130deg,
-      transparent 20%,
-      rgba(255,255,255,0.38) 34%,
-      rgba(255,255,255,0.10) 46%,
+    linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 9%),
+    linear-gradient(180deg, rgba(255,255,255,0.42) 0%, transparent 9%),
+    linear-gradient(90deg, rgba(255,255,255,0.28) 0%, transparent 9%),
+    linear-gradient(128deg,
+      transparent 22%,
+      rgba(255,255,255,0.32) 36%,
+      rgba(255,255,255,0.08) 47%,
       transparent 58%
     ),
-    radial-gradient(ellipse 26% 16% at 24% 18%, rgba(255,255,255,0.95) 0%, transparent 100%),
-    linear-gradient(180deg, rgba(255,255,255,0.28) 0%, transparent 26%),
-    linear-gradient(320deg, rgba(0,0,0,0.20) 0%, transparent 44%),
+    radial-gradient(ellipse 22% 14% at 26% 19%, rgba(255,255,255,0.92) 0%, transparent 100%),
+    linear-gradient(315deg, rgba(0,0,0,0.18) 0%, transparent 42%),
     var(--color);
   will-change: transform, filter;
 }
