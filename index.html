@@ -28,8 +28,9 @@ html, body {
   -webkit-user-select: none;
   user-select: none;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
+  padding-top: 5vh;
 }
 
 /* ============================================================
@@ -563,7 +564,7 @@ function onTap(idx) {
       if (guided.step >= guided.notes.length) {
         var g = guided;
         guided = null;
-        setTimeout(function() { celebrate(g); }, 700);
+        setTimeout(function() { celebrate(g); }, 1800);
       } else {
         setTimeout(function() { if (guided) highlightStep(); }, 320);
       }
