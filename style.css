@@ -1,0 +1,269 @@
+/* ============================================================
+   TOUCHLIGHT  –  style.css
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent:  #b06fff;
+  --accent2: #00d4ff;
+}
+
+html, body {
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   GRID  — full-bleed square, centred
+   ============================================================ */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* Square sized to the smaller viewport dimension, symmetrically
+     centred by the body's flexbox. The 95 cap leaves a small margin
+     so it never clips; dvh tracks mobile browser-chrome so the
+     bottom row stays visible when address bars show/hide. */
+  width:  min(100vw, 95vh);
+  width:  min(100vw, 95dvh);
+  aspect-ratio: 1;
+  background: #000;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TILE + OCTAGON
+   ============================================================ */
+.tile {
+  background: #000;
+  aspect-ratio: 1;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.octagon {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(
+    29.3% 0%,  70.7% 0%,
+    100%  29.3%, 100%  70.7%,
+    70.7% 100%, 29.3% 100%,
+    0%    70.7%, 0%    29.3%
+  );
+  background-color: var(--color);
+  background-image:
+    linear-gradient(148deg,
+      rgba(255,255,255,0.52) 0%,
+      rgba(255,255,255,0.18) 10%,
+      transparent 32%
+    ),
+    linear-gradient(328deg,
+      rgba(0,0,0,0.28) 0%,
+      transparent 36%
+    );
+  will-change: transform, filter;
+}
+
+.note-label {
+  position: absolute;
+  bottom: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(0.38rem, 1.5vw, 0.62rem);
+  font-weight: 700;
+  color: rgba(0,0,0,0.32);
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: 'Orbitron', monospace;
+}
+
+/* ============================================================
+   FLOATING MODE BUTTON
+   ============================================================ */
+#mode-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:  clamp(48px, 13vw, 64px);
+  height: clamp(48px, 13vw, 64px);
+  padding: 0;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  color: rgba(255,255,255,0.78);
+  font-size: clamp(1.5rem, 6vw, 2.3rem);
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s, border-color 0.2s, filter 0.2s, transform 0.12s;
+  z-index: 100;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  /* gentle pulsing ring to signal the note is tappable */
+  animation: mode-btn-hint 2.6s ease-in-out infinite;
+}
+@keyframes mode-btn-hint {
+  0%   { box-shadow: 0 0 0 0   rgba(176,111,255,0.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(176,111,255,0); }
+  100% { box-shadow: 0 0 0 0   rgba(176,111,255,0); }
+}
+#mode-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.75);
+}
+#mode-btn.active {
+  color: var(--accent);
+  background: rgba(176,111,255,0.18);
+  border-color: var(--accent);
+  filter: drop-shadow(0 0 10px var(--accent));
+  /* once engaged it no longer needs to invite a tap */
+  animation: none;
+}
+#mode-btn:active { transform: scale(0.88); }
+
+/* ============================================================
+   PROGRESS BAR  (top edge, 2px)
+   ============================================================ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  z-index: 50;
+}
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: width 0.25s ease-out;
+  box-shadow: 0 0 6px var(--accent2);
+}
+
+.hidden { display: none !important; }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes tap-flash {
+  0%   { filter: brightness(1)   saturate(1);   transform: scale(1); }
+  10%  { filter: brightness(5.5) saturate(0.4); transform: scale(1.08); }
+  100% { filter: brightness(1)   saturate(1);   transform: scale(1); }
+}
+.octagon.flash { animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards; }
+
+.ripple-wave {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.5);
+  pointer-events: none;
+  animation: ripple-wave-out 0.55s ease-out forwards;
+  z-index: 5;
+}
+@keyframes ripple-wave-out {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+@keyframes guided-pulse {
+  0%, 100% {
+    filter: brightness(1.2) drop-shadow(0 0 10px var(--color));
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(4.5) saturate(1.4)
+            drop-shadow(0 0 30px var(--color))
+            drop-shadow(0 0 60px white);
+    transform: scale(1.13);
+  }
+}
+.octagon.guided-active { animation: guided-pulse 0.65s ease-in-out infinite; }
+
+.tile.guided-hint::after {
+  content: '';
+  position: absolute;
+  inset: 2%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.15);
+  pointer-events: none;
+  animation: hint-ring 0.65s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes hint-ring {
+  0%, 100% { transform: scale(1);    opacity: 0.35; }
+  50%       { transform: scale(1.18); opacity: 0.85; }
+}
+
+@keyframes correct-tap {
+  0%   { filter: brightness(1) saturate(1); }
+  20%  { filter: brightness(6) saturate(2); }
+  100% { filter: brightness(1) saturate(1); }
+}
+.octagon.correct { animation: correct-tap 0.46s ease-out forwards; }
+
+@keyframes wrong-tap {
+  0%   { transform: translateX(0)    scale(1);    filter: brightness(1); }
+  18%  { transform: translateX(-6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  42%  { transform: translateX( 6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  62%  { transform: translateX(-4px); filter: brightness(0.65); }
+  80%  { transform: translateX( 4px); filter: brightness(0.65); }
+  100% { transform: translateX(0)    scale(1);    filter: brightness(1); }
+}
+.octagon.wrong { animation: wrong-tap 0.52s ease-out forwards; }
+
+@keyframes celebrate {
+  0%   { filter: brightness(1)   hue-rotate(0deg);   transform: scale(1); }
+  28%  { filter: brightness(6)   hue-rotate(120deg); transform: scale(1.14); }
+  65%  { filter: brightness(2.5) hue-rotate(240deg); transform: scale(1.07); }
+  100% { filter: brightness(1)   hue-rotate(360deg); transform: scale(1); }
+}
+.octagon.celebrate { animation: celebrate 0.72s ease-out forwards; }
+
+@keyframes idle-twinkle {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.55); }
+}
+.octagon.idle-twinkle { animation: idle-twinkle 0.7s ease-in-out forwards; }
+
+/* ============================================================
+   MESSAGE OVERLAY  (kept for potential future use, hidden by default)
+   ============================================================ */
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.28s;
+}
+#overlay.visible { opacity: 1; }
+#overlay-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem, 5vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.8);
+  padding: 16px 40px;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar { display: none; }

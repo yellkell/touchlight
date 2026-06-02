@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TOUCHLIGHT</title>
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAxCAYAAACYq/ofAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAADnBJREFUeJx9WgmQFcUZ/nre7AFhAQ9cBROMSiIWkWAShaggFoeImFIRFFHRirpSXoByh8h9CRoQiIq3RKNRDMaSpAySQi2DQmJAgkYrUaCMB4cC6+57b7rT/9/H9Mx7sWH3zZvp6f6P7//+v7s3bjimC6ZMndpvyMDzFretq+taiCIBIRBFgL4AXQMK1PhK0TcR3oYSkp8JJfRzxX2og4jA36kf3+d/MC9Kpf8L/paYYSD1PWHfV0KZGZV5R0rJY1AfaqVSGbt37T781ua3rls4b86r8S2339pn9MjLf3/sUUd0iApGQGHkMALBCEH6Aem98JoUYUX9M8HK0g2lJLxMCN9VSBItnBYsQeSfFYzekMII7xTwI5N12BQS3U4+qVOvXj3XyqQ4PO53Tt+ljUdqJfTzQoRME8J9iop74bWUyDXFqvB/LajSRqBP6ucEU8oNpJ/RvErye2Wyun3u5o1EaILEvgXu17Fjhw6DhgxcFnc9/vj2hchAqUIcZ4nQPUZOthh9CmRu+34EAYaCFjApOfBERgTvHeWhSJ7jC4Kk7cN+FW5sB29hpxD+WeMxjUfHNQwn5eXct38//vnhf9gaZCMOGWUGdoanSWVi4kJpC1Nfhp/tkyQJWz4huTwkjdCRVZag4bxSiAoansJ4Qr9L73uHmYCz47OfceIJJ6BzY6Oe18wdx7WIeUjuFLGA23e+jwnTZ+hXI8auKBSM+dzAJGC5DJGUIctGYKHM5KVSyQYk9UnYGwwp/dxAS3qPKRvELph5aJpGeV8x2iR7KvU5wXTh/Lm47NJLTdwSwcgy4hwwtHAlNH95EPVt26Lvuf3Qtk0brU4aBMq6/u233saH732AhDCflFDWyrEC1hspy0jvjfA69JJjttN+eBp+fPqPjMKW4yIb9Ae+/Aovv/xHHD70NaPAYt6zaiwtBzL1CWKSMlpaiigWyzjxpO/ipitHg9gs3/6xfRuGjxjFECMlQgXcdaiAmUNmFAhbXFeD1fevwqmnfD9DLg5ec+cvwHPPrWWFdYrw7OU8GQvhad9SYoJya5ED7d7Fv8KQc8/ByV27Igxr6tezxw/QdOP1WLZsJb+TF971C4XR01NkeEHd84IWatKkiVqJbiAkZwhE9yGjLVi8OM1JOaPS/dgnNZVSWlnDi8i/tbmEhfcsx7KFc9Gmri6wlNF+zNWj8erGjdi69Z3MwEwUlgRkwM3KTRL0o6+9z+qDG669VmO+gLzvm7/+GnPmLUSxtRy8mE8DOuDDNwlkTJfausTd9GjdunXoe3YfjL7kYk1hBZMw+R2Fo47oiCkT78CIkVeZpCeZR/m9yDENDBsxXUapYkwu2j9RoQaTpkzG0Ud2RJRHlP731G9/hxfWvRRQu/AU7FBEIIudpURK2JpxSswO/LWsMGv2fPQ/+yx0aTwWjr+ZcvV1n969ccXll2HNb57WFo0ymdiNWSC8wMQI9XHzkQeuvm4M+vU501cOYduzew+mTpvux+TxPLSMUqai0h4R1iXKFBUc9FISA9nMqgf44tPPMXvREtw7fzbq6+rZdfSI59aWvfOOcRrH27F9246MwK45QaJc1u3R8zRMHH874nxg6NZaLGLegkXY+/lebdT0PWcc+jSViJGb8whra7MpTUosxHi1L0mZYO0zz+Oi8wdh6MCBmUlpDp1ZcfPYJjSNvcUL67wSesFZlT/1vbE3j8VxjZ0qSiMy3uuvvYE1Tz0DV3KEerpqS/iaTnskZJawSAzZhwZpaW7G7LmL0Etb8TgteNY6wLChQ7D+Z8Pw4osvVwR53kskwIALBuGSYRfAoi7T9u0/gJmz5+HgocOpEg76kfCs5T8VeUQFNKnSitPZgJmF40Fhh4bPr1c/jF9OnqgFSHMpw0wLeceEcdi4cRMOHjzkDULxEcYg/W7TvgETxo9DXVyAyGGK+j7y6GN4883NCCfwMezL8+BxJAy0kqAGMoWcqZecBRnj9KnvrVhxP87qfSYGn3eeCTcvoOAaaOrkOzFtxkwf+KGHGQ46uTZpGPY8tXtFXFDbsuVvuHvJPSjJxBsy3wyL+2KMZ9cekcKUcAZ7PCll+UhUJDRqzdraS3Ru+emZZ6ChXbvALEaukSOH46X167H5r1vYGKkikjuc8L1uuH7MNShEIk1ettH6ZPl9K/HFZ/tcIGSasNxP/7gSKRh1SH6tiC7TLPczzPRgDCzCNJcBrpRPE9prm17D0uUrNMQmceqg0sZZrramFjN/MR0jrhiNw4ebfTkfiRhxfR3mzrwLHRva2ZwRJjGFx598Es8+9wIStxILFPA/ytV7sAWnicfYribtQ0PSUtdbhvu5DrdJLtWeLL1y1QMYc9WV+E6X4zMT0ljdup2Ea8dchVX3P6QNkobmgMEDcMbpvfSQWUGptRZLWLz4Xv3Zmo2JQBGGul2swbIf7BLEJES/WLH2F5a1bGUp4NbeRlEadP/efbjx1tvw7BOPoqFte7h6zSXLphtvwPo/vYKPPt7N39vrKmD65Mmora2kKbIoJb6d772PfHoPFXJrErpHMCxE1iuSFAkKvDKVdG5TwWKNPeG4X6QhRtebNmzCAw8/gvE33wJ4n5l1dX1dLaZPm4zbxt/JmwxNNzWhE5chUUWMv/LKn/HY42sqhM9AyntJ8LLYyCSd6V1ClDaIwInKLUEzlZnzivUQDVTU2feepfdh+MWXoGvnzjoDh7WYLl/O+AlGDL8YH+zag0uHXcgBnleCFmBUAu0/8GUFi1Uq4Z/YojTNVTFUQB4uoKvwYliLee/on08//UzD4i48uGo52urFWNgozppuuB6f7P0C7drUVxaF2oAPPPgQ3tz8toW0yM6V7eyrDwW3wlQ++cbEc7z4sZb+ppbBq1tX6HfXvfgH9O/fFz+/5mqz+xGl/Tu0b88/1cbe9u4OLFi02OQbkZ0jE+BWkXButzZx8Rx7GPl9KFcTudhWGQWE3QBw8KJaqKWlRQt0N4YOGYxjqXxR6Q7H/zMOCT9//iLs3vNfmx/g2SoPJ1+iBCWUVGbLyakXc7w4zKncioWVqMxMkbAJyW3b6O8f/XsXps2chdX3LXdqVoeIbRs2bMTza9cZI0aBwEEL4eznNrjKoIggGtN9ygt+zsw6MueJwL3C5h1l6Zh2G59/di1GjRiOAf36owpX+HZAB/aUqTNQ0lU2clDKeEM5ZQKhhC2joPyOi+SiUWZ3NKTKVq35RVKFxYKC8JCuVsePm6Qz/wY0fKuBvRZFlQZYsWIltv79HaNslVIkHRuZ2LASmQBXRhFhE1gsg3WCW35Vc3E1hcgIbkPBrTl27HwPCxYuxZyZM1gJaaFrpcLO9/+FOTo28l4IvxN0IVXmmTOqpM0pSbStOCFy3hPKJMTUYq6uqswflVweVr5pPxLiE03JhucLyGEVW7ZuRSvt0lBiFNmxwqTnKgQ3rjdodkJPAuQRCzWtrVC5aasHe6hEOK77Ru8wZAvZnXRqtPrkkb+J1Rw4cgb0SdrCStpji0Q6j5CvbKFrXnRqwO72RYH7Q2PY0sXO7oo6XjIjXIfACy/zhFHtx2oSQi5jEEEQ0yBL0pCIdUmiGAbEQfY8A0hrK4hsfKQDBpNIFQhmFdH3yolMF0C2auAzEaR5qFKJVMnwM9/sNrizNkFLMqSEW3VVi48MACoH9qvBoLpJOL8Gb1pwS7ebko83Y+jUWLkg90YLknbYh/OI3QZnDdliKo0NF3yZva9QAJF9ZnQxZTbBNYwwtx+lkFbV+bxRbdsojBF35sOb9CLdzYwNpTkIpO7NBmmey6u3VFGTj4RMg9qPVAWmeQPlCcL1NayobGZ3z8xn7OqWKB0FmSiwq7F84IXrAX+uF9Rokg9rXF7IecxeR1HkC0OBavGgkMGrlcrt/LgDKqUSVzTCJLUMMwlUi4fsTnu1ctv8Ut5qks8IvadtLLmTLJ/BkR0u9Vh2DhmM72LdlCgBX6d0WT0WqjNIHjvmjjtvoUabKYKVMcfL+WxVzRvV5OB4ALxHuPong0R2p5GPuJBkNt1C4UMI5Ft2p9IIzwL7/GLLHp8B9Tj2PL4QHCOE42fIIyiheLeS70YGQbyWMoqZGJEmRhJIj2GX8HgCvdKjuokmzmnKo6S7k2A6ka74dMEcjOWO1VzOoWRLCjhjeRc5drKGCPeSnYKJSjz1x9LSIW0Q0IR0Jkh2knRkrauyQhwjdj+kSK6aZYslMj0MlYYa6aBUFMwfAkTK/dVDinujSMTjOkV4CypYD4fxSEd8RCBlIpHwTBN2PeLZx9VHNDHtyervtbW1aFNfj7q6Or6ONfSE2zoX8Ke3pWIRrXqVWE7KSKSxfqLHLCQW13ZpENK68XSEmtoa1NbpOWh8UqoQpfFq8xqfEGgjFYsloNhqt3CDQlfRiZW0eUQaGu3StSvGjp+gDVPQk8R6khh1cS1qaoxX3GYO/8EAKa5/SrKMr/RiaYlef7v6THJm999MArTs6MLlslGj8G09X5t6Y6RCAGF6h0+MlVn4UbFJR4ItLSV0O6W7r9mETQ+x9Z1dNip0bjwO14y+0m/OOaXDoMwvlEjo1qJet8+ahUJtnalOqUIQBlpmMkuV0iqn+wwedD669+jhN9oQLups/LmlcMU+NCkp3KpdK9Lc3Jy0a2jwAW4CS2ZrC2kHFpVZ15czXE4nzLUO025PWHo2C5mIjpk1yaiyhXRItcpOav/YxuWMsAB2ltG/CNbxG6+/8cSFFw1doN0aCX+eHiTGlDWzCoRfLMRYYGYw5Y8l0vzgGMtWyNLEDlNqITs+q+WWBMqRmKsalFsW+gS766OPV8cb/7JxWadORx91SvfuEzoc0THmHXimRfO3IraY4Gs3mMuoblYlynBwIcGIvVo1nlNFUrVLdJ/fMSxHf94R8bIoxS9fJ8Kv/qQtMg0aIlPH6buHDjWX39227ek1jz8x/3/hQzRQRHjsMwAAAABJRU5ErkJggg==">
+  <link rel="apple-touch-icon" href="data:image/png;base64,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">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+  <style>
+/* ============================================================
+   TOUCHLIGHT  –  style.css
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent:  #b06fff;
+  --accent2: #00d4ff;
+}
+
+html, body {
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   GRID  — full-bleed square, centred
+   ============================================================ */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* Square sized to the smaller viewport dimension, symmetrically
+     centred by the body's flexbox. The 95 cap leaves a small margin
+     so it never clips; dvh tracks mobile browser-chrome so the
+     bottom row stays visible when address bars show/hide. */
+  width:  min(100vw, 95vh);
+  width:  min(100vw, 95dvh);
+  aspect-ratio: 1;
+  background: #000;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TILE + OCTAGON
+   ============================================================ */
+.tile {
+  background: #000;
+  aspect-ratio: 1;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.octagon {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(
+    29.3% 0%,  70.7% 0%,
+    100%  29.3%, 100%  70.7%,
+    70.7% 100%, 29.3% 100%,
+    0%    70.7%, 0%    29.3%
+  );
+  background-color: var(--color);
+  background-image:
+    linear-gradient(148deg,
+      rgba(255,255,255,0.52) 0%,
+      rgba(255,255,255,0.18) 10%,
+      transparent 32%
+    ),
+    linear-gradient(328deg,
+      rgba(0,0,0,0.28) 0%,
+      transparent 36%
+    );
+  will-change: transform, filter;
+}
+
+.note-label {
+  position: absolute;
+  bottom: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(0.38rem, 1.5vw, 0.62rem);
+  font-weight: 700;
+  color: rgba(0,0,0,0.32);
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: 'Orbitron', monospace;
+}
+
+/* ============================================================
+   FLOATING MODE BUTTON
+   ============================================================ */
+#mode-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:  clamp(48px, 13vw, 64px);
+  height: clamp(48px, 13vw, 64px);
+  padding: 0;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  color: rgba(255,255,255,0.78);
+  font-size: clamp(1.5rem, 6vw, 2.3rem);
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s, border-color 0.2s, filter 0.2s, transform 0.12s;
+  z-index: 100;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  /* gentle pulsing ring to signal the note is tappable */
+  animation: mode-btn-hint 2.6s ease-in-out infinite;
+}
+@keyframes mode-btn-hint {
+  0%   { box-shadow: 0 0 0 0   rgba(176,111,255,0.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(176,111,255,0); }
+  100% { box-shadow: 0 0 0 0   rgba(176,111,255,0); }
+}
+#mode-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.75);
+}
+#mode-btn.active {
+  color: var(--accent);
+  background: rgba(176,111,255,0.18);
+  border-color: var(--accent);
+  filter: drop-shadow(0 0 10px var(--accent));
+  /* once engaged it no longer needs to invite a tap */
+  animation: none;
+}
+#mode-btn:active { transform: scale(0.88); }
+
+/* ============================================================
+   PROGRESS BAR  (top edge, 2px)
+   ============================================================ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  z-index: 50;
+}
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: width 0.25s ease-out;
+  box-shadow: 0 0 6px var(--accent2);
+}
+
+.hidden { display: none !important; }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes tap-flash {
+  0%   { filter: brightness(1)   saturate(1);   transform: scale(1); }
+  10%  { filter: brightness(5.5) saturate(0.4); transform: scale(1.08); }
+  100% { filter: brightness(1)   saturate(1);   transform: scale(1); }
+}
+.octagon.flash { animation: tap-flash 0.38s cubic-bezier(.22,.61,.36,1) forwards; }
+
+.ripple-wave {
+  position: absolute;
+  inset: 6.5%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.5);
+  pointer-events: none;
+  animation: ripple-wave-out 0.55s ease-out forwards;
+  z-index: 5;
+}
+@keyframes ripple-wave-out {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+@keyframes guided-pulse {
+  0%, 100% {
+    filter: brightness(1.2) drop-shadow(0 0 10px var(--color));
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(4.5) saturate(1.4)
+            drop-shadow(0 0 30px var(--color))
+            drop-shadow(0 0 60px white);
+    transform: scale(1.13);
+  }
+}
+.octagon.guided-active { animation: guided-pulse 0.65s ease-in-out infinite; }
+
+.tile.guided-hint::after {
+  content: '';
+  position: absolute;
+  inset: 2%;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  background: rgba(255,255,255,0.15);
+  pointer-events: none;
+  animation: hint-ring 0.65s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes hint-ring {
+  0%, 100% { transform: scale(1);    opacity: 0.35; }
+  50%       { transform: scale(1.18); opacity: 0.85; }
+}
+
+@keyframes correct-tap {
+  0%   { filter: brightness(1) saturate(1); }
+  20%  { filter: brightness(6) saturate(2); }
+  100% { filter: brightness(1) saturate(1); }
+}
+.octagon.correct { animation: correct-tap 0.46s ease-out forwards; }
+
+@keyframes wrong-tap {
+  0%   { transform: translateX(0)    scale(1);    filter: brightness(1); }
+  18%  { transform: translateX(-6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  42%  { transform: translateX( 6px) scale(0.95); filter: brightness(0.3) sepia(1) saturate(4) hue-rotate(-25deg); }
+  62%  { transform: translateX(-4px); filter: brightness(0.65); }
+  80%  { transform: translateX( 4px); filter: brightness(0.65); }
+  100% { transform: translateX(0)    scale(1);    filter: brightness(1); }
+}
+.octagon.wrong { animation: wrong-tap 0.52s ease-out forwards; }
+
+@keyframes celebrate {
+  0%   { filter: brightness(1)   hue-rotate(0deg);   transform: scale(1); }
+  28%  { filter: brightness(6)   hue-rotate(120deg); transform: scale(1.14); }
+  65%  { filter: brightness(2.5) hue-rotate(240deg); transform: scale(1.07); }
+  100% { filter: brightness(1)   hue-rotate(360deg); transform: scale(1); }
+}
+.octagon.celebrate { animation: celebrate 0.72s ease-out forwards; }
+
+@keyframes idle-twinkle {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.55); }
+}
+.octagon.idle-twinkle { animation: idle-twinkle 0.7s ease-in-out forwards; }
+
+/* ============================================================
+   MESSAGE OVERLAY  (kept for potential future use, hidden by default)
+   ============================================================ */
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.28s;
+}
+#overlay.visible { opacity: 1; }
+#overlay-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem, 5vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.8);
+  padding: 16px 40px;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar { display: none; }
+
+</style>
+</head>
+<body>
+  <div id="grid"></div>
+  <button id="mode-btn" aria-label="Toggle guided mode">♩</button>
+  <div id="progress-bar" class="hidden"><div id="progress-fill"></div></div>
+  <div id="overlay" aria-live="assertive"><div id="overlay-text"></div></div>
+  <script>
+// TOUCHLIGHT  –  audio.js
+// Marimba-like synthesiser using Web Audio API
+
+var _ctx    = null;
+var _reverb = null;
+var _dryGain = null;
+var _wetGain = null;
+
+function _boot() {
+  if (_ctx) return;
+  _ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  /* ---- Synthetic room reverb ---- */
+  _reverb = _ctx.createConvolver();
+  var sr  = _ctx.sampleRate;
+  var len = Math.floor(sr * 1.4);
+  var buf = _ctx.createBuffer(2, len, sr);
+  for (var ch = 0; ch < 2; ch++) {
+    var d = buf.getChannelData(ch);
+    for (var i = 0; i < len; i++) {
+      // decaying random noise impulse response
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.8);
+    }
+  }
+  _reverb.buffer = buf;
+
+  /* ---- Master dry / wet ---- */
+  _dryGain = _ctx.createGain();
+  _wetGain = _ctx.createGain();
+  _dryGain.gain.value = 0.80;
+  _wetGain.gain.value = 0.20;
+
+  _dryGain.connect(_ctx.destination);
+  _wetGain.connect(_reverb);
+  _reverb.connect(_ctx.destination);
+}
+
+function playNote(frequency, duration) {
+  duration = duration || 0.85;
+  _boot();
+  if (_ctx.state === 'suspended') _ctx.resume();
+
+  var ctx = _ctx;
+  var now = ctx.currentTime;
+  var atk = 0.004; // 4ms attack — percussive
+
+  /* ---- Oscillators ----
+     Real marimba bars produce inharmonic overtones.
+     We model the 3 main partials with their approximate
+     frequency ratios: 1 : 2.756 : 5.404               */
+  var o1 = ctx.createOscillator(); o1.type = 'sine'; o1.frequency.value = frequency;
+  var o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = frequency * 2.756;
+  var o3 = ctx.createOscillator(); o3.type = 'sine'; o3.frequency.value = frequency * 5.404;
+
+  var g1 = ctx.createGain();
+  var g2 = ctx.createGain();
+  var g3 = ctx.createGain();
+  var master = ctx.createGain();
+  master.gain.value = 0.82;
+
+  /* Envelopes — fundamental decays longest */
+  var d1 = duration * 0.92;
+  var d2 = duration * 0.32;
+  var d3 = duration * 0.14;
+
+  _env(g1.gain, now, atk, d1, 0.62);
+  _env(g2.gain, now, atk, d2, 0.20);
+  _env(g3.gain, now, atk, d3, 0.06);
+
+  o1.connect(g1); g1.connect(master);
+  o2.connect(g2); g2.connect(master);
+  o3.connect(g3); g3.connect(master);
+  master.connect(_dryGain);
+  master.connect(_wetGain);
+
+  var stop = now + duration + 0.12;
+  o1.start(now); o1.stop(stop);
+  o2.start(now); o2.stop(stop);
+  o3.start(now); o3.stop(stop);
+}
+
+function _env(param, now, attack, decay, peak) {
+  param.setValueAtTime(0, now);
+  param.linearRampToValueAtTime(peak, now + attack);
+  param.exponentialRampToValueAtTime(0.0001, now + attack + decay);
+}
+
+function playChord(frequencies, duration) {
+  frequencies.forEach(function(f) { playNote(f, duration); });
+}
+
+</script>
+  <script>
+// TOUCHLIGHT  –  songs.js
+// Chromatic C4 → C6 (25 notes) note table + song definitions
+
+var NOTES = [
+  { name: 'C4',  label: 'C',   freq: 261.63, nat: true  },
+  { name: 'C#4', label: 'C#',  freq: 277.18, nat: false },
+  { name: 'D4',  label: 'D',   freq: 293.66, nat: true  },
+  { name: 'D#4', label: 'D#',  freq: 311.13, nat: false },
+  { name: 'E4',  label: 'E',   freq: 329.63, nat: true  },
+  { name: 'F4',  label: 'F',   freq: 349.23, nat: true  },
+  { name: 'F#4', label: 'F#',  freq: 369.99, nat: false },
+  { name: 'G4',  label: 'G',   freq: 392.00, nat: true  },
+  { name: 'G#4', label: 'G#',  freq: 415.30, nat: false },
+  { name: 'A4',  label: 'A',   freq: 440.00, nat: true  },
+  { name: 'A#4', label: 'A#',  freq: 466.16, nat: false },
+  { name: 'B4',  label: 'B',   freq: 493.88, nat: true  },
+  { name: 'C5',  label: 'C',   freq: 523.25, nat: true  },
+  { name: 'C#5', label: 'C#',  freq: 554.37, nat: false },
+  { name: 'D5',  label: 'D',   freq: 587.33, nat: true  },
+  { name: 'D#5', label: 'D#',  freq: 622.25, nat: false },
+  { name: 'E5',  label: 'E',   freq: 659.25, nat: true  },
+  { name: 'F5',  label: 'F',   freq: 698.46, nat: true  },
+  { name: 'F#5', label: 'F#',  freq: 739.99, nat: false },
+  { name: 'G5',  label: 'G',   freq: 783.99, nat: true  },
+  { name: 'G#5', label: 'G#',  freq: 830.61, nat: false },
+  { name: 'A5',  label: 'A',   freq: 880.00, nat: true  },
+  { name: 'A#5', label: 'A#',  freq: 932.33, nat: false },
+  { name: 'B5',  label: 'B',   freq: 987.77, nat: true  },
+  { name: 'C6',  label: 'C',   freq: 1046.50, nat: true },
+];
+
+// name → grid index lookup
+var NOTE_INDEX = {};
+NOTES.forEach(function(n, i) { NOTE_INDEX[n.name] = i; });
+
+var SONGS = {
+  twinkle: {
+    name:  'Twinkle Twinkle Little Star',
+    emoji: '⭐',
+    notes: [
+      'C4','C4','G4','G4','A4','A4','G4',
+      'F4','F4','E4','E4','D4','D4','C4',
+      'G4','G4','F4','F4','E4','E4','D4',
+      'G4','G4','F4','F4','E4','E4','D4',
+      'C4','C4','G4','G4','A4','A4','G4',
+      'F4','F4','E4','E4','D4','D4','C4'
+    ]
+  },
+  birthday: {
+    name:  'Happy Birthday',
+    emoji: '🎂',
+    notes: [
+      'G4','G4','A4','G4','C5','B4',
+      'G4','G4','A4','G4','D5','C5',
+      'G4','G4','G5','E5','C5','B4','A4',
+      'F5','F5','E5','C5','D5','C5'
+    ]
+  },
+  mary: {
+    name:  'Mary Had a Little Lamb',
+    emoji: '🐑',
+    notes: [
+      'E4','D4','C4','D4','E4','E4','E4',
+      'D4','D4','D4',
+      'E4','G4','G4',
+      'E4','D4','C4','D4','E4','E4','E4',
+      'E4','D4','D4','E4','D4','C4'
+    ]
+  },
+  hotcross: {
+    name:  'Hot Cross Buns',
+    emoji: '🥐',
+    notes: [
+      'E4','D4','C4',
+      'E4','D4','C4',
+      'C4','C4','C4','C4',
+      'D4','D4','D4','D4',
+      'E4','D4','C4'
+    ]
+  },
+  ode: {
+    name:  'Ode to Joy',
+    emoji: '🎻',
+    notes: [
+      'E4','E4','F4','G4','G4','F4','E4','D4',
+      'C4','C4','D4','E4','E4','D4','D4',
+      'E4','E4','F4','G4','G4','F4','E4','D4',
+      'C4','C4','D4','E4','D4','C4','C4'
+    ]
+  }
+};
+
+</script>
+  <script>
+// TOUCHLIGHT  –  app.js
+// Main application: grid, touch handling, free-play + guided mode
+
+/* ============================================================
+   COLOR PALETTE  (25 vibrant hues, one per chromatic note)
+   ============================================================ */
+var COLORS = [
+  '#FF2D55', // C4   ruby red
+  '#FF6B1A', // C#4  ember orange
+  '#FFB800', // D4   deep amber
+  '#E8F520', // D#4  acid yellow
+  '#7ED321', // E4   forest lime
+  '#00C875', // F4   jade
+  '#00E5B0', // F#4  sea glass
+  '#00B8D9', // G4   ocean
+  '#0070F3', // G#4  electric blue
+  '#3D5AFE', // A4   ultramarine
+  '#651FFF', // A#4  deep violet
+  '#AA00FF', // B4   royal purple
+  '#D500F9', // C5   neon orchid
+  '#F50057', // C#5  crimson
+  '#FF1744', // D5   scarlet
+  '#FF6D00', // D#5  deep tangerine
+  '#FFAB00', // E5   saffron
+  '#C6FF00', // F5   chartreuse
+  '#00E676', // F#5  spring green
+  '#1DE9B6', // G5   teal glow
+  '#00B0FF', // G#5  azure
+  '#2979FF', // A5   sapphire
+  '#7C4DFF', // A#5  amethyst
+  '#E040FB', // B5   fuchsia
+  '#FF4081', // C6   flamingo
+];
+
+/* ============================================================
+   DOM
+   ============================================================ */
+var gridEl      = document.getElementById('grid');
+var modeBtnEl   = document.getElementById('mode-btn');
+var progressBar = document.getElementById('progress-bar');
+var progressFill= document.getElementById('progress-fill');
+var overlayEl   = document.getElementById('overlay');
+var overlayText = document.getElementById('overlay-text');
+
+/* ============================================================
+   STATE
+   ============================================================ */
+var mode    = 'free';  // 'free' | 'guided'
+var guided  = null;    // { notes, step, total } or null
+
+/* ============================================================
+   BUILD GRID
+   ============================================================ */
+var tiles = NOTES.map(function(note, i) {
+  var tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.setAttribute('role', 'button');
+  tile.setAttribute('tabindex', '0');
+  tile.setAttribute('aria-label', note.name);
+
+  var oct = document.createElement('div');
+  oct.className = 'octagon';
+  oct.style.setProperty('--color', COLORS[i]);
+
+  var lbl = document.createElement('span');
+  lbl.className = 'note-label';
+  lbl.textContent = note.label;
+
+  oct.appendChild(lbl);
+  tile.appendChild(oct);
+  gridEl.appendChild(tile);
+
+  tile.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    onTap(i);
+  });
+
+  tile.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(i); }
+  });
+
+  return { tile: tile, oct: oct, note: note };
+});
+
+/* ============================================================
+   MODE TOGGLE  — one tap starts Twinkle Twinkle silently
+   ============================================================ */
+modeBtnEl.addEventListener('click', function() {
+  if (mode === 'free') {
+    mode = 'guided';
+    modeBtnEl.textContent = '♩';
+    modeBtnEl.classList.add('active');
+    stopGuided();
+    guided = { notes: SONGS.twinkle.notes.slice(), step: 0, total: SONGS.twinkle.notes.length };
+    progressBar.classList.remove('hidden');
+    setProgress(0);
+    setTimeout(function() { if (guided) highlightStep(); }, 400);
+  } else {
+    mode = 'free';
+    modeBtnEl.textContent = '♩';
+    modeBtnEl.classList.remove('active');
+    progressBar.classList.add('hidden');
+    stopGuided();
+  }
+});
+
+
+/* ============================================================
+   TAP HANDLER
+   ============================================================ */
+function onTap(idx) {
+  var t = tiles[idx];
+  playNote(t.note.freq);
+  triggerFlash(t.oct);
+  spawnRipple(t.tile);
+
+  if (mode === 'guided' && guided) {
+    var expected = guided.notes[guided.step];
+    var expIdx   = NOTE_INDEX[expected];
+
+    if (idx === expIdx) {
+      // Correct note!
+      t.tile.classList.remove('guided-hint');
+      t.oct.classList.remove('guided-active');
+      addAnim(t.oct, 'correct', 480);
+
+      guided.step++;
+      setProgress(guided.step / guided.total);
+
+      if (guided.step >= guided.notes.length) {
+        var g = guided;
+        guided = null;
+        setTimeout(function() { celebrate(g); }, 1800);
+      } else {
+        setTimeout(function() { if (guided) highlightStep(); }, 320);
+      }
+    } else {
+      // Wrong note
+      addAnim(t.oct, 'wrong', 560);
+    }
+  }
+}
+
+function spawnRipple(tile) {
+  var wave = document.createElement('div');
+  wave.className = 'ripple-wave';
+  tile.appendChild(wave);
+  setTimeout(function() { if (wave.parentNode) wave.parentNode.removeChild(wave); }, 580);
+}
+
+function getNeighbours(idx) {
+  var row = Math.floor(idx / 5), col = idx % 5, result = [];
+  [[-1,0],[1,0],[0,-1],[0,1]].forEach(function(d) {
+    var r = row + d[0], c = col + d[1];
+    if (r >= 0 && r < 5 && c >= 0 && c < 5) result.push(r * 5 + c);
+  });
+  return result;
+}
+
+/* ============================================================
+   GUIDED HELPERS
+   ============================================================ */
+function highlightStep() {
+  if (!guided) return;
+  tiles.forEach(function(t) {
+    t.oct.classList.remove('guided-active');
+    t.tile.classList.remove('guided-hint');
+  });
+  var noteName = guided.notes[guided.step];
+  var idx = NOTE_INDEX[noteName];
+  if (idx !== undefined) {
+    tiles[idx].oct.classList.add('guided-active');
+    tiles[idx].tile.classList.add('guided-hint');
+  }
+}
+
+function stopGuided() {
+  guided = null;
+  tiles.forEach(function(t) {
+    t.oct.classList.remove('guided-active', 'correct', 'wrong');
+    t.tile.classList.remove('guided-hint');
+  });
+}
+
+function setProgress(ratio) {
+  progressFill.style.width = Math.min(ratio * 100, 100) + '%';
+}
+
+/* ============================================================
+   CELEBRATION
+   ============================================================ */
+function celebrate(finishedGuided) {
+  // Song complete — return to free play and reset the mode button
+  // to its pre-pressed (un-lit) state.
+  mode = 'free';
+  modeBtnEl.classList.remove('active');
+  tiles.forEach(function(t) { t.oct.classList.remove('guided-active'); });
+  progressBar.classList.add('hidden');
+
+  /* Pure visual cascade — no text */
+  tiles.forEach(function(t, i) {
+    setTimeout(function() {
+      addAnim(t.oct, 'celebrate', 780);
+    }, i * 52);
+  });
+
+  /* Play C-major arpeggio fanfare */
+  var fanfare = [0, 4, 7, 12, 7, 4, 12, 16]; // C E G C E G C E
+  fanfare.forEach(function(noteIdx, i) {
+    setTimeout(function() {
+      if (noteIdx < tiles.length) playNote(tiles[noteIdx].note.freq, 0.7);
+    }, i * 130);
+  });
+}
+
+/* ============================================================
+   ANIMATION UTILITIES
+   ============================================================ */
+function triggerFlash(oct) {
+  oct.classList.remove('flash', 'guided-active');
+  void oct.offsetWidth; // force reflow to restart animation
+  oct.classList.add('flash');
+  setTimeout(function() { oct.classList.remove('flash'); }, 400);
+}
+
+function addAnim(el, cls, duration) {
+  el.classList.remove(cls);
+  void el.offsetWidth;
+  el.classList.add(cls);
+  setTimeout(function() { el.classList.remove(cls); }, duration);
+}
+
+/* ============================================================
+   MESSAGE OVERLAY
+   ============================================================ */
+var _msgTimer = null;
+
+function showMsg(text, duration) {
+  overlayText.textContent = '';
+  // Support newline in message
+  text.split('\n').forEach(function(line, i) {
+    if (i > 0) overlayText.appendChild(document.createElement('br'));
+    overlayText.appendChild(document.createTextNode(line));
+  });
+  overlayEl.classList.add('visible');
+  clearTimeout(_msgTimer);
+  _msgTimer = setTimeout(function() {
+    overlayEl.classList.remove('visible');
+  }, duration || 2000);
+}
+
+/* ============================================================
+   IDLE AMBIENT TWINKLE  (free-play only)
+   ============================================================ */
+function idleTick() {
+  if (mode === 'free') {
+    var idx = Math.floor(Math.random() * tiles.length);
+    var t   = tiles[idx];
+    var oct = t.oct;
+    if (!oct.classList.contains('flash') &&
+        !oct.classList.contains('guided-active') &&
+        !oct.classList.contains('celebrate')) {
+      addAnim(oct, 'idle-twinkle', 720);
+    }
+  }
+  setTimeout(idleTick, 400 + Math.random() * 900);
+}
+
+setTimeout(idleTick, 1500);
+
+/* ============================================================
+   BACKGROUND STAR PARTICLES
+   ============================================================ */
+(function spawnStars() {
+  var container = document.getElementById('app');
+  for (var i = 0; i < 60; i++) {
+    (function(idx) {
+      var star = document.createElement('div');
+      star.style.cssText = [
+        'position:fixed',
+        'pointer-events:none',
+        'z-index:0',
+        'border-radius:50%',
+        'background:#fff',
+        'opacity:' + (0.04 + Math.random() * 0.12),
+        'width:'  + (1 + Math.random() * 2.5) + 'px',
+        'height:' + (1 + Math.random() * 2.5) + 'px',
+        'top:'    + Math.random() * 100 + 'vh',
+        'left:'   + Math.random() * 100 + 'vw',
+      ].join(';');
+      document.body.appendChild(star);
+    })(i);
+  }
+})();
+
+</script>
+</body>
+</html>
