@@ -58,6 +58,7 @@ html, body {
   aspect-ratio: 1;
   position: relative;
   cursor: pointer;
+  touch-action: none;
   -webkit-tap-highlight-color: transparent;
   outline: none;
 }
@@ -547,17 +548,58 @@ var tiles = NOTES.map(function(note, i) {
   tile.appendChild(oct);
   gridEl.appendChild(tile);
 
-  tile.addEventListener('pointerdown', function(e) {
-    e.preventDefault();
-    onTap(i);
-  });
+  tile.dataset.idx = i;
 
+  // Keyboard activation (pointer/touch is handled at the grid level so
+  // a single drag can sweep across many tiles).
   tile.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(i); }
   });
 
   return { tile: tile, oct: oct, note: note };
 });
+
+/* ============================================================
+   DRAG-TO-PLAY  — press and slide across octagons to sound each
+   ============================================================ */
+var isPointerDown = false;
+var lastDragIdx   = -1;   // last tile sounded in this drag (avoids re-triggering)
+
+function tileIdxFromPoint(x, y) {
+  var el = document.elementFromPoint(x, y);
+  var tile = el && el.closest ? el.closest('.tile') : null;
+  if (!tile || tile.dataset.idx === undefined) return -1;
+  return +tile.dataset.idx;
+}
+
+function dragTo(x, y, isDrag) {
+  var idx = tileIdxFromPoint(x, y);
+  if (idx === -1 || idx === lastDragIdx) return;
+  lastDragIdx = idx;
+  onTap(idx, isDrag);   // isDrag → shorter, lighter glissando note
+}
+
+gridEl.addEventListener('pointerdown', function(e) {
+  e.preventDefault();
+  isPointerDown = true;
+  lastDragIdx = -1;
+  // Release implicit pointer capture so touchmove reports the tile actually
+  // under the finger rather than the one we started on.
+  if (e.target.releasePointerCapture) {
+    try { e.target.releasePointerCapture(e.pointerId); } catch (_) {}
+  }
+  dragTo(e.clientX, e.clientY, false);   // initial press = full tap note
+});
+
+gridEl.addEventListener('pointermove', function(e) {
+  if (!isPointerDown) return;
+  e.preventDefault();
+  dragTo(e.clientX, e.clientY, true);    // sliding into new tiles = glissando
+});
+
+function endDrag() { isPointerDown = false; lastDragIdx = -1; }
+window.addEventListener('pointerup',     endDrag);
+window.addEventListener('pointercancel', endDrag);
 
 /* ============================================================
    MODE TOGGLE  — one tap starts Twinkle Twinkle silently
@@ -585,9 +627,9 @@ modeBtnEl.addEventListener('click', function() {
 /* ============================================================
    TAP HANDLER
    ============================================================ */
-function onTap(idx) {
+function onTap(idx, isDrag) {
   var t = tiles[idx];
-  playNote(t.note.freq);
+  playNote(t.note.freq, isDrag ? 0.55 : 0.85);
   triggerFlash(t.oct);
   spawnRipple(t.tile);
 
