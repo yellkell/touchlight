@@ -685,8 +685,7 @@ var _msgTimer = null;
 function showMsg(text, duration) {
   overlayText.textContent = '';
   // Support newline in message
-  text.split('
-').forEach(function(line, i) {
+  text.split('\n').forEach(function(line, i) {
     if (i > 0) overlayText.appendChild(document.createElement('br'));
     overlayText.appendChild(document.createTextNode(line));
   });
